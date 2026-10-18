@@ -15,6 +15,10 @@
 
 **What comes out.** A short answer with source tags where the resume has them, or a one-sentence "not on the page" with the email address.
 
+## Status
+
+Deployed 2026-10-18 at `https://ask-this-resume.finkelstein-dean.workers.dev`. Live checks: health, published rules at `/prompt`, the Pages origin allowed, foreign origins refused with 403, and a polite 503 until the API key is set. The chat panel on the page is switched on after the key is set and the assistant passes its test questions.
+
 ## Deploy (Dean, one time)
 
 ```

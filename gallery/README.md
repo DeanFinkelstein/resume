@@ -12,7 +12,7 @@ Each artifact has the same shape: a README that says what it does, what goes in,
 | 2 | [Org audit to tasks](02-org-audit-to-tasks/) | The audit-to-tasks workflow rebuilt in public: scan, findings, prioritized tasks, created through MCP after approval | Ran, reviewed, and created: 7 GitHub issues in this repo. Rerun after MFA: 37 findings, Health Check 64 to 69 |
 | 3 | [Pre-refresh risk scan](03-pre-refresh-risk-scan/) | Judgment about risk: everything a sandbox refresh would wipe or break, with owners | Ran: 16 checks in 67 seconds, redacted checklist in `out/` |
 | 4 | [Adopting AI safely in a Salesforce shop](04-adopting-ai-safely/) | Can explain OAuth, data retention, licensing, and the Einstein Trust Layer to an IT lead in one page | Done: one-page PDF, facts checked against eight primary sources |
-| 5 | [Ask this resume](05-ask-this-resume/) | A grounded assistant on the resume page with visible rules, a spend cap, and honest refusals | Worker built, type-checked, and tested locally (10 of 10 checks). Deploy pending Cloudflare login and API key |
+| 5 | [Ask this resume](05-ask-this-resume/) | A grounded assistant on the resume page with visible rules, a spend cap, and honest refusals | Deployed to Cloudflare 2026-10-18; live checks pass. Waiting on the API key, then test questions, then the chat panel goes on |
 
 ## Ground rules
 

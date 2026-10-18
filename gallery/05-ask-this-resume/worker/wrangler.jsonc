@@ -15,10 +15,10 @@
   // Create the namespace once:  npx wrangler kv namespace create RATE_KV
   // then paste the id it prints here.
   "kv_namespaces": [
-    { "binding": "RATE_KV", "id": "REPLACE_WITH_KV_NAMESPACE_ID" }
+    { "binding": "RATE_KV", "id": "b236d247569d4d4783b6575989c01314" }
   ],
   "rules": [
-    { "type": "Text", "globs": ["**/*.txt"] }
+    { "type": "Text", "globs": ["**/*.txt"], "fallthrough": false }
   ],
   "vars": {
     // Comma-separated list of page origins allowed to call /ask. Add the GitHub Pages origin when the page is hosted.
