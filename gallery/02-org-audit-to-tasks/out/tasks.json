@@ -21,7 +21,8 @@
         "Each listed user has a documented reason or a narrower permission set",
         "Exceptions have an owner and a review date"
       ],
-      "reviewNote": "Reviewed before creation: F-001 (the org's only administrator, Dean) dropped as an accepted exception. In a single-admin demo org, the System Administrator profile is expected."
+      "reviewNote": "Reviewed before creation: F-001 (the org's only administrator, Dean) dropped as an accepted exception. In a single-admin demo org, the System Administrator profile is expected.",
+      "url": "https://github.com/DeanFinkelstein/resume/issues/1"
     },
     {
       "key": "T-002",
@@ -50,7 +51,8 @@
       ],
       "acceptance": [
         "Each setting matches the Health Check baseline or has a recorded reason"
-      ]
+      ],
+      "url": "https://github.com/DeanFinkelstein/resume/issues/2"
     },
     {
       "key": "T-003",
@@ -69,7 +71,8 @@
       "acceptance": [
         "Org-wide coverage at or above 85 percent",
         "New tests assert behavior, not just lines touched"
-      ]
+      ],
+      "url": "https://github.com/DeanFinkelstein/resume/issues/3"
     },
     {
       "key": "T-004",
@@ -94,7 +97,8 @@
         "Each listed user is confirmed as a service account with an owner, or reclaimed with a note",
         "The Resume Agent’s run-as user stays active"
       ],
-      "reviewNote": "Reviewed before creation: reworded. The audit's generic advice (freeze or deactivate) would have broken the Resume Agent, whose run-as user is on this list."
+      "reviewNote": "Reviewed before creation: reworded. The audit's generic advice (freeze or deactivate) would have broken the Resume Agent, whose run-as user is on this list.",
+      "url": "https://github.com/DeanFinkelstein/resume/issues/4"
     },
     {
       "key": "T-005",
@@ -116,7 +120,8 @@
       ],
       "acceptance": [
         "Each setting matches the Health Check baseline or has a recorded reason"
-      ]
+      ],
+      "url": "https://github.com/DeanFinkelstein/resume/issues/5"
     },
     {
       "key": "T-006",
@@ -143,7 +148,8 @@
       ],
       "acceptance": [
         "Every listed field has a one-line description: what it holds, who sets it, what reads it"
-      ]
+      ],
+      "url": "https://github.com/DeanFinkelstein/resume/issues/6"
     },
     {
       "key": "T-007",
@@ -161,7 +167,8 @@
       ],
       "acceptance": [
         "Each item reactivated with a test, archived, or deleted with a change-log note"
-      ]
+      ],
+      "url": "https://github.com/DeanFinkelstein/resume/issues/7"
     }
   ],
   "review": {

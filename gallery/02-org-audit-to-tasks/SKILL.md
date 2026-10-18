@@ -45,7 +45,7 @@ Do not create anything until the person says the list is right.
 
 ## Step 5: create
 
-Create each approved task through the connected MCP server, with the title, description, priority, labels, checklist (ClickUp checklist or a GitHub task list in the body), and acceptance criteria. Record each created task's URL back into `out/tasks.json` under `url`.
+Create each approved task through the connected MCP server, or for GitHub with `node create-issues.js --repo owner/name` (preview first with `--dry-run`), with the title, description, priority, labels, checklist (ClickUp checklist or a GitHub task list in the body), and acceptance criteria. Record each created task's URL back into `out/tasks.json` under `url`.
 
 Then report: how many tasks were created, where, and the time from Step 2 to the last task created.
 

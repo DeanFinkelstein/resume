@@ -234,10 +234,10 @@ const gallery = [
     key: 'audit', ready: true, ai: true, href: 'gallery/02-org-audit-to-tasks/',
     title: { t: 'Org audit to tasks', p: 'Health check that writes its own to-do list' },
     what: {
-      t: 'Read-only org audit (access, licenses, retired automation, API versions, coverage, Health Check, limits) shaped into prioritized tasks with acceptance criteria, then created in ClickUp or GitHub through MCP after review.',
+      t: 'Read-only org audit (access, licenses, retired automation, API versions, coverage, Health Check, limits) shaped into prioritized tasks with acceptance criteria, reviewed, then created as GitHub issues.',
       p: 'Scans a Salesforce account for security gaps, wasted licenses, and old automation, then turns what it finds into a prioritized task list a team can work from.',
     },
-    proof: 'Ran 2026-10-17: 36 findings in 41 seconds, 7 tasks',
+    proof: 'Ran 2026-10-18: 37 findings, 7 GitHub issues',
   },
   {
     key: 'refresh', ready: true, ai: true, href: 'gallery/03-pre-refresh-risk-scan/',
