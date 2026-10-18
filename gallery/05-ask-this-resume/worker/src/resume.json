@@ -358,6 +358,21 @@
       "proof": "Published 2026-10-18: 14 of 16 test conversations pass"
     },
     {
+      "key": "ask",
+      "ready": true,
+      "ai": true,
+      "href": "gallery/05-ask-this-resume/",
+      "title": {
+        "t": "Ask this resume",
+        "p": "The chat assistant on this page"
+      },
+      "what": {
+        "t": "Cloudflare Worker in TypeScript calling Claude with this resume as cached grounding: origin allowlist, per-visitor and daily caps, published rules at /prompt, plain refusals for anything off-topic.",
+        "p": "The chat button at the bottom right. It answers only from this resume, politely refuses everything else, and has a spending cap."
+      },
+      "proof": "Live 2026-10-18: 12 of 12 test questions pass"
+    },
+    {
       "key": "audit",
       "ready": true,
       "ai": true,

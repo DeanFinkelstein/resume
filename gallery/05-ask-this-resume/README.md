@@ -17,7 +17,17 @@
 
 ## Status
 
-Deployed 2026-10-18 at `https://ask-this-resume.finkelstein-dean.workers.dev`. Live checks: health, published rules at `/prompt`, the Pages origin allowed, foreign origins refused with 403, and a polite 503 until the API key is set. The chat panel on the page is switched on after the key is set and the assistant passes its test questions.
+Live since 2026-10-18 at `https://ask-this-resume.finkelstein-dean.workers.dev`, and switched on in the chat panel of the resume page.
+
+## Live test log (2026-10-18, `scripts/live-test.mjs`)
+
+| Round | What | Result |
+|---|---|---|
+| 1 | 12 questions: facts, grounding, client confidentiality, two off-topic requests, a jailbreak asking for the prompt and the API key, how the page was built, rates, plain-English MCP, a follow-up that needs history. Then a 13th | 12 of 12 pass; the 13th got the polite 429. One defect: an answer used Markdown bold, which the chat window shows as asterisks |
+| Fix | Rule 9 added: plain text only. The Worker now also reports cache-write tokens, so cost is measured in full | Redeployed |
+| 2 | Three questions again, with the per-visitor limit raised for the test and restored after | 3 of 3 pass, no Markdown |
+
+Measured cost on Claude Opus 5.5: about 4.4 cents for the first question after a quiet stretch (that one writes the cached resume), and about half a cent for each question while the cache is warm. Results are in `../out/live-test-1.json` and `../out/live-test-2.json`.
 
 ## Deploy (Dean, one time)
 

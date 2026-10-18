@@ -167,6 +167,7 @@ export default {
         input: response.usage.input_tokens,
         output: response.usage.output_tokens,
         cached: response.usage.cache_read_input_tokens ?? 0,
+        cacheWrite: response.usage.cache_creation_input_tokens ?? 0,
       };
       // Structured log without the question or the answer: visitors' words stay out of the logs.
       ctx.waitUntil(Promise.resolve().then(() => console.log(JSON.stringify({

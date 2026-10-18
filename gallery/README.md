@@ -12,7 +12,7 @@ Each artifact has the same shape: a README that says what it does, what goes in,
 | 2 | [Org audit to tasks](02-org-audit-to-tasks/) | The audit-to-tasks workflow rebuilt in public: scan, findings, prioritized tasks, created through MCP after approval | Ran, reviewed, and created: 7 GitHub issues in this repo. Rerun after MFA: 37 findings, Health Check 64 to 69 |
 | 3 | [Pre-refresh risk scan](03-pre-refresh-risk-scan/) | Judgment about risk: everything a sandbox refresh would wipe or break, with owners | Ran: 16 checks in 67 seconds, redacted checklist in `out/` |
 | 4 | [Adopting AI safely in a Salesforce shop](04-adopting-ai-safely/) | Can explain OAuth, data retention, licensing, and the Einstein Trust Layer to an IT lead in one page | Done: one-page PDF, facts checked against eight primary sources |
-| 5 | [Ask this resume](05-ask-this-resume/) | A grounded assistant on the resume page with visible rules, a spend cap, and honest refusals | Deployed to Cloudflare 2026-10-18; live checks pass. Waiting on the API key, then test questions, then the chat panel goes on |
+| 5 | [Ask this resume](05-ask-this-resume/) | A grounded assistant on the resume page with visible rules, a spend cap, and honest refusals | Live on the resume page since 2026-10-18. 12 of 12 test questions pass, including off-topic and jailbreak refusals. About half a cent per answer once cached |
 
 ## Ground rules
 
@@ -24,7 +24,6 @@ Each artifact has the same shape: a README that says what it does, what goes in,
 
 ## Still to do (Dean)
 
-1. **Re-record the agent demo** against the active version 2 and save it over `01-agentforce-resume-agent/demo.mp4`.
-2. **Switch on the Worker** for artifact 5: create an Anthropic API key, then store it as a Worker secret after Claude deploys it (steps in the setup guide).
+Nothing outstanding.
 
-Done on 2026-10-18: multi-factor authentication turned on in the dev org; the public repo created and GitHub Pages turned on; the audit tasks created as issues.
+Done on 2026-10-18: multi-factor authentication turned on in the dev org; the agent demo re-recorded against version 2; the public repo created and GitHub Pages turned on; the audit tasks created as issues; the Worker deployed with its key set and the chat panel switched on.

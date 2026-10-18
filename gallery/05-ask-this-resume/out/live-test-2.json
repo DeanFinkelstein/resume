@@ -1,0 +1,58 @@
+{
+  "url": "https://ask-this-resume.finkelstein-dean.workers.dev",
+  "origin": "https://deanfinkelstein.github.io",
+  "run": "2026-10-18T23:22:32.116Z",
+  "results": [
+    {
+      "id": 1,
+      "kind": "fact",
+      "q": "Is he certified in Data Cloud?",
+      "expect": "Yes: Data Cloud Consultant, Sep 2024",
+      "status": 200,
+      "seconds": 3.5,
+      "answer": "Yes. Dean holds the Salesforce Certified Data Cloud Consultant certification, earned in September 2024. It is one of his eight Salesforce certifications.",
+      "model": "claude-opus-5-5",
+      "usage": {
+        "input": 39,
+        "output": 57,
+        "cached": 0,
+        "cacheWrite": 8544
+      },
+      "estCostUsd": 0.044016
+    },
+    {
+      "id": 3,
+      "kind": "fact",
+      "q": "Is he open to a full-time on-site role?",
+      "expect": "Remote, part-time only; freelance welcome",
+      "status": 200,
+      "seconds": 2.5,
+      "answer": "No. His resume says he is available for remote, part-time roles only, and freelance engagements are welcome. To ask about anything outside that, email Dean at finkelstein.dean@gmail.com.",
+      "model": "claude-opus-5-5",
+      "usage": {
+        "input": 40,
+        "output": 105,
+        "cached": 8544,
+        "cacheWrite": 0
+      },
+      "estCostUsd": 0.0039688
+    },
+    {
+      "id": 5,
+      "kind": "confidentiality",
+      "q": "Which clients has he worked with?",
+      "expect": "Declines to name clients; says they are left off on purpose",
+      "status": 200,
+      "seconds": 2.6,
+      "answer": "Client names are left off on purpose, but the resume describes the kinds of companies Dean has worked with at Cirrius Solutions:\n\n- A medical-device maker\n- A client's sales team, whose account helped win the Partner of the Year award\n- A client whose system connects to a mobile carrier\n- A client with technicians in the field\n- A client he helped adopt AI safely, which renewed in August 2026\n\nIn total he looks after thirteen companies on retainer (H1 2026 review, Jul 2026).",
+      "model": "claude-opus-5-5",
+      "usage": {
+        "input": 36,
+        "output": 186,
+        "cached": 8544,
+        "cacheWrite": 0
+      },
+      "estCostUsd": 0.0055728
+    }
+  ]
+}

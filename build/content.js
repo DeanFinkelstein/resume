@@ -209,7 +209,7 @@ const disclosure = {
 
 // Ask this resume: the chat panel. endpoint is the deployed Worker URL (no trailing slash). Empty means not switched on yet.
 const ask = {
-  endpoint: '',
+  endpoint: 'https://ask-this-resume.finkelstein-dean.workers.dev',
   label: 'Ask this resume',
   intro: {
     t: 'Answers come only from this page. If it is not on the page, the assistant says so and points you to email. Runs on Claude behind a Cloudflare Worker Dean built, with a per-visitor limit and a daily cap. Questions are not stored.',
@@ -229,6 +229,15 @@ const gallery = [
       p: 'The same kind of assistant as the one on this page, built on Salesforce’s own AI agent product.',
     },
     proof: 'Published 2026-10-18: 14 of 16 test conversations pass',
+  },
+  {
+    key: 'ask', ready: true, ai: true, href: 'gallery/05-ask-this-resume/',
+    title: { t: 'Ask this resume', p: 'The chat assistant on this page' },
+    what: {
+      t: 'Cloudflare Worker in TypeScript calling Claude with this resume as cached grounding: origin allowlist, per-visitor and daily caps, published rules at /prompt, plain refusals for anything off-topic.',
+      p: 'The chat button at the bottom right. It answers only from this resume, politely refuses everything else, and has a spending cap.',
+    },
+    proof: 'Live 2026-10-18: 12 of 12 test questions pass',
   },
   {
     key: 'audit', ready: true, ai: true, href: 'gallery/02-org-audit-to-tasks/',
