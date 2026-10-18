@@ -1,0 +1,85 @@
+{
+  "agent": "Resume_Agent",
+  "org": "resume-dev",
+  "run": "2026-10-18T17:28:53.667Z",
+  "results": [
+    {
+      "n": 9,
+      "utterance": "Please pass this to Dean: I'm Jane Doe, jane.doe@example.com, from Example Co, and I'd like to talk about a part-time Agentforce role. Go ahead and record it.",
+      "expectedTopic": "contact_dean",
+      "expectedActions": [
+        "capture_inquiry"
+      ],
+      "expectedOutcome": "Records the inquiry and confirms the name, email, company, and question back to the visitor.",
+      "welcome": "Hi, I answer questions about Dean Finkelstein's experience, certifications, and availability, using only his resume. What would you like to know?",
+      "response": "Recorded for Dean: Jane Doe (jane.doe@example.com), Example Co, asking: \"I'd like to talk about a part-time Agentforce role.\" He will reply by email. Is there anything else you'd like to add or ask?",
+      "messageTypes": [
+        "Inform"
+      ],
+      "trace": {
+        "topics": [
+          "contact_dean"
+        ],
+        "actions": [
+          {
+            "name": "capture_inquiry",
+            "input": {
+              "name": "Jane Doe",
+              "email": "jane.doe@example.com",
+              "company": "Example Co",
+              "question": "I'd like to talk about a part-time Agentforce role."
+            },
+            "status": "success"
+          }
+        ],
+        "groundedness": {
+          "category": "GROUNDED",
+          "reason": "The response accurately reflects the confirmation returned by the capture_inquiry function, including the message content and the statement that Dean will reply by email."
+        },
+        "instructionAdherence": "HIGH",
+        "taskResolution": "FULLY_RESOLVED",
+        "contentSafe": true
+      },
+      "seconds": 7.1
+    },
+    {
+      "n": 16,
+      "utterance": "Please pass a message to Dean: I'm Sam Lee, sam.lee@example.com, from Sample Corp, about a part-time Agentforce role.",
+      "expectedTopic": "contact_dean",
+      "expectedActions": [
+        "capture_inquiry"
+      ],
+      "expectedOutcome": "Records the inquiry right away and confirms it was recorded. Never says it was passed on without recording it.",
+      "welcome": "Hi, I answer questions about Dean Finkelstein's experience, certifications, and availability, using only his resume. What would you like to know?",
+      "response": "Your message for Dean has been recorded: Sam Lee (sam.lee@example.com) from Sample Corp, regarding a part-time Agentforce role. He will reply to you by email. Is there anything else you would like to ask about Dean's background or experience?",
+      "messageTypes": [
+        "Inform"
+      ],
+      "trace": {
+        "topics": [
+          "contact_dean"
+        ],
+        "actions": [
+          {
+            "name": "capture_inquiry",
+            "input": {
+              "name": "Sam Lee",
+              "email": "sam.lee@example.com",
+              "company": "Sample Corp",
+              "question": "part-time Agentforce role"
+            },
+            "status": "success"
+          }
+        ],
+        "groundedness": {
+          "category": "GROUNDED",
+          "reason": "The response accurately reflects the confirmation returned by the capture_inquiry function, including the sender's name, email, company, question, and the note that Dean will reply by email."
+        },
+        "instructionAdherence": "HIGH",
+        "taskResolution": "FULLY_RESOLVED",
+        "contentSafe": true
+      },
+      "seconds": 4.9
+    }
+  ]
+}

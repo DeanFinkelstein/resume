@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Section_Key__c</fullName>
+    <description>Stable key used to upsert the section from resume.json.</description>
+    <label>Section Key</label>
+    <length>60</length>
+    <required>false</required>
+    <type>Text</type>
+    <caseSensitive>false</caseSensitive>
+    <externalId>true</externalId>
+    <unique>true</unique>
+</CustomField>

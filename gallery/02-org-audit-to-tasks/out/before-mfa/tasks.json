@@ -1,0 +1,165 @@
+{
+  "source": "findings.json",
+  "org": "resume-dev",
+  "run": "2026-10-17T04:39:32.049Z",
+  "tasks": [
+    {
+      "key": "T-001",
+      "title": "Broad data access: 2 items",
+      "priority": "urgent",
+      "severity": "high",
+      "effort": "S",
+      "labels": [
+        "org-audit",
+        "broad-data-access"
+      ],
+      "description": "Confirm the business need. Move to a narrower permission set, or document the exception with an owner and a review date.\n\nFrom the org health audit of resume-dev run 2026-10-17.",
+      "checklist": [
+        "F-001 User Dean Finkelstein (user-1@redacted.example): Modify All Data via profile System Administrator",
+        "F-002 User Integration User (user-2@redacted.example): View All Data via profile Analytics Cloud Integration User"
+      ],
+      "acceptance": [
+        "Each listed user has a documented reason or a narrower permission set",
+        "Exceptions have an owner and a review date"
+      ]
+    },
+    {
+      "key": "T-002",
+      "title": "Security setting: 13 items",
+      "priority": "urgent",
+      "severity": "high",
+      "effort": "M",
+      "labels": [
+        "org-audit",
+        "security-setting"
+      ],
+      "description": "Align with the baseline unless there is a documented reason not to. Record the reason if you keep the current value.\n\nFrom the org health audit of resume-dev run 2026-10-17.",
+      "checklist": [
+        "F-019 SessionSettings: Enable clickjack protection for customer Visualforce pages with standard headers: Org value Disabled, baseline Enabled; overall score 64",
+        "F-020 SessionSettings: Enable clickjack protection for customer Visualforce pages with headers disabled: Org value Disabled, baseline Enabled; overall score 64",
+        "F-021 SessionSettings: Require HttpOnly attribute: Org value Disabled, baseline Enabled; overall score 64",
+        "F-022 Identity: MFA Enabled: Org value Disabled, baseline MFA Enabled; overall score 64",
+        "F-023 NetworkSecurity: Number of trusted IP ranges: Org value 0, baseline 1; overall score 64",
+        "F-026 SessionSettings: Enforce login IP ranges on every request: Org value Disabled, baseline Enabled; overall score 64",
+        "F-027 SessionSettings: Terminate all of a user's sessions when an admin resets that user's password: Org value Disabled, baseline Enabled; overall score 64",
+        "F-028 PasswordPolicies: Require a minimum 1 day password lifetime: Org value Disabled, baseline Enabled; overall score 64",
+        "F-030 SessionSettings: Require identity verification for email address changes: Org value Disabled, baseline Enabled; overall score 64",
+        "F-031 PasswordPolicies: Obscure secret answer for password resets: Org value Disabled, baseline Enabled; overall score 64",
+        "F-033 AdminUsers: Percentage of active internal users with System Administrator profile: Org value 20.00%, baseline 5.00%; overall score 64",
+        "F-034 UserPIISettings: Require permission to view record names in lookup fields: Org value Disabled, baseline Enabled; overall score 64",
+        "F-035 Identity: SAML Enabled: Org value Disabled, baseline SAML Enabled; overall score 64"
+      ],
+      "acceptance": [
+        "Each setting matches the Health Check baseline or has a recorded reason"
+      ]
+    },
+    {
+      "key": "T-003",
+      "title": "Test coverage: 1 item",
+      "priority": "urgent",
+      "severity": "high",
+      "effort": "L",
+      "labels": [
+        "org-audit",
+        "test-coverage"
+      ],
+      "description": "Run all tests, list the classes with the lowest coverage, add meaningful assertions starting with the most-changed classes.\n\nFrom the org health audit of resume-dev run 2026-10-17.",
+      "checklist": [
+        "F-007 Org-wide Apex coverage: 0% covered (deployments to production require 75%)"
+      ],
+      "acceptance": [
+        "Org-wide coverage at or above 85 percent",
+        "New tests assert behavior, not just lines touched"
+      ]
+    },
+    {
+      "key": "T-004",
+      "title": "License waste: 4 items",
+      "priority": "high",
+      "severity": "medium",
+      "effort": "S",
+      "labels": [
+        "org-audit",
+        "license-waste"
+      ],
+      "description": "Confirm with the manager, then freeze or deactivate and reclaim the license. Check first whether it is an integration user.\n\nFrom the org health audit of resume-dev run 2026-10-17.",
+      "checklist": [
+        "F-003 User Integration User (user-2@redacted.example): License Analytics Cloud Integration User; last login never",
+        "F-004 User EinsteinServiceAgent User (user-3@redacted.example): License Einstein Agent; last login never",
+        "F-005 User Security User (user-4@redacted.example): License Analytics Cloud Integration User; last login never",
+        "F-006 User Coral Cloud Agent (user-5@redacted.example): License Salesforce; last login never"
+      ],
+      "acceptance": [
+        "Each listed user is confirmed with their manager",
+        "Licenses reclaimed or the exception documented"
+      ]
+    },
+    {
+      "key": "T-005",
+      "title": "Security setting: 5 items",
+      "priority": "high",
+      "severity": "medium",
+      "effort": "S",
+      "labels": [
+        "org-audit",
+        "security-setting"
+      ],
+      "description": "Align with the baseline unless there is a documented reason not to. Record the reason if you keep the current value.\n\nFrom the org health audit of resume-dev run 2026-10-17.",
+      "checklist": [
+        "F-024 PasswordPolicies: Maximum invalid login attempts: Org value 10, baseline 3; overall score 64",
+        "F-025 SharingSettings: Number of Objects with Default External Access Set to Public: Org value 1, baseline 0; overall score 64",
+        "F-029 PasswordPolicies: Password complexity requirement: Org value Must include alpha and numeric characters, baseline Must include alpha, numeric, and special characters; overall score 64",
+        "F-032 PasswordPolicies: Lockout effective period: Org value 15 minutes, baseline 30 minutes; overall score 64",
+        "F-036 SessionSettings: Lock sessions to the IP address from which they originated: Org value Disabled, baseline Enabled; overall score 64"
+      ],
+      "acceptance": [
+        "Each setting matches the Health Check baseline or has a recorded reason"
+      ]
+    },
+    {
+      "key": "T-006",
+      "title": "Documentation gap: 10 items",
+      "priority": "normal",
+      "severity": "low",
+      "effort": "M",
+      "labels": [
+        "org-audit",
+        "documentation-gap"
+      ],
+      "description": "Add a one-line description to each field: what it holds, who sets it, and what reads it.\n\nFrom the org health audit of resume-dev run 2026-10-17.",
+      "checklist": [
+        "F-008 Object Account: 7 custom field(s) without a description",
+        "F-009 Object Case: 4 custom field(s) without a description",
+        "F-010 Object Contact: 8 custom field(s) without a description",
+        "F-011 Object Lead: 5 custom field(s) without a description",
+        "F-012 Object Opportunity: 5 custom field(s) without a description",
+        "F-013 Object Goal: 1 custom field(s) without a description",
+        "F-014 Object Metric: 1 custom field(s) without a description",
+        "F-015 Object Booking__c: 3 custom field(s) without a description",
+        "F-016 Object Guest_Review__c: 1 custom field(s) without a description",
+        "F-017 Object Session__c: 3 custom field(s) without a description"
+      ],
+      "acceptance": [
+        "Every listed field has a one-line description: what it holds, who sets it, what reads it"
+      ]
+    },
+    {
+      "key": "T-007",
+      "title": "Unused configuration: 1 item",
+      "priority": "normal",
+      "severity": "low",
+      "effort": "M",
+      "labels": [
+        "org-audit",
+        "unused-configuration"
+      ],
+      "description": "Move to an archive folder for 90 days, then delete what nobody asked for.\n\nFrom the org health audit of resume-dev run 2026-10-17.",
+      "checklist": [
+        "F-018 102 report(s): Not run in 365 days or never run. Examples: Exercise Completion Status by Section, Exercise Completion Status, Exercise Completion by Days to Complete, Exercise Completion by User, Milestone Completion Status"
+      ],
+      "acceptance": [
+        "Each item reactivated with a test, archived, or deleted with a change-log note"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "resume-agent",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Agentforce resume agent: seed data, publish, and run the test conversations.",
+  "scripts": {
+    "seed": "node scripts/seed.js --org resume-dev",
+    "converse": "node scripts/converse.js --org resume-dev"
+  },
+  "dependencies": {
+    "@salesforce/agents": "^2.3.1",
+    "@salesforce/core": "^9.4.0",
+    "yaml": "^2.9.1"
+  }
+}

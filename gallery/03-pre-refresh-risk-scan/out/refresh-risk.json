@@ -1,0 +1,562 @@
+{
+  "org": "resume-dev",
+  "run": "2026-10-17T04:37:41.648Z",
+  "days": 90,
+  "redacted": true,
+  "results": [
+    {
+      "id": "scheduled-jobs",
+      "title": "Scheduled jobs",
+      "why": "Scheduled Apex, scheduled reports, and dashboard refreshes do not survive a refresh. Each one is rescheduled by hand or by a post-copy script.",
+      "action": "Record class, schedule, and running user. Reschedule after the refresh.",
+      "count": 3,
+      "items": [
+        {
+          "name": "Metalytics Data Loader Job for Org : 00D-redacted",
+          "type": "system job (type code K)",
+          "state": "WAITING",
+          "next": "2026-10-17T05:17:00.000+0000",
+          "cron": "0 17 22 ? * 1,2,3,4,5,6,7",
+          "runsAs": "Integration User"
+        },
+        {
+          "name": "Program Milestone Computation Cron Job",
+          "type": "system job (type code P)",
+          "state": "WAITING",
+          "next": "2026-10-17T06:59:00.000+0000",
+          "cron": "0 59 6,11,16,23 ? * *",
+          "runsAs": "Automated Process"
+        },
+        {
+          "name": "Program Status Update Cron Job",
+          "type": "system job (type code S)",
+          "state": "WAITING",
+          "next": "2026-10-17T12:00:00.000+0000",
+          "cron": "0 0 5,20 ? * *",
+          "runsAs": "Automated Process"
+        }
+      ]
+    },
+    {
+      "id": "connected-apps",
+      "title": "Connected apps",
+      "why": "Connected apps copy over, but the tokens users and integrations granted do not. Every integration that authenticates through one re-authorizes against the new sandbox.",
+      "action": "List which integration uses each app and who re-authorizes it.",
+      "count": 0,
+      "items": []
+    },
+    {
+      "id": "oauth-tokens",
+      "title": "Granted OAuth tokens",
+      "why": "Tokens are tied to the org copy they were issued in. After the refresh, every one of these is dead.",
+      "action": "For each app and user, plan the re-authentication and who does it.",
+      "count": 1,
+      "items": [
+        {
+          "app": "Salesforce CLI",
+          "user": "user-1@redacted.example",
+          "lastUsed": "2026-10-17",
+          "uses": 1
+        }
+      ]
+    },
+    {
+      "id": "named-credentials",
+      "title": "Named credentials",
+      "why": "The definitions copy over. The stored passwords, tokens, and certificates behind them do not.",
+      "action": "Re-enter each credential after the refresh. Know where the secret lives before you start.",
+      "count": 1,
+      "items": [
+        {
+          "name": "Weather_Endpoint",
+          "modified": "2026-10-16",
+          "by": "Dean Finkelstein"
+        }
+      ]
+    },
+    {
+      "id": "external-credentials",
+      "title": "External credentials",
+      "why": "Same as named credentials: the principal secrets have to be re-entered.",
+      "action": "Re-enter principal secrets after the refresh.",
+      "count": 0,
+      "items": []
+    },
+    {
+      "id": "auth-providers",
+      "title": "Auth providers and SSO",
+      "why": "Auth providers and SAML configurations copy over, but callback URLs change with the sandbox domain, and identity providers may need the new URLs.",
+      "action": "Update callback URLs on the identity provider side. Test SSO login first thing after the refresh.",
+      "count": 0,
+      "items": []
+    },
+    {
+      "id": "remote-sites",
+      "title": "Remote site settings and CSP trusted sites",
+      "why": "These copy over from Production. Any endpoint that exists only for the sandbox (a test API, a staging host) disappears.",
+      "action": "Re-add sandbox-only endpoints after the refresh.",
+      "count": 7,
+      "items": [
+        {
+          "name": "ApexDevNet",
+          "modified": "2026-10-16",
+          "by": "Dean Finkelstein",
+          "kind": "RemoteSiteSetting"
+        },
+        {
+          "name": "Cloudniary",
+          "modified": "2026-10-16",
+          "by": "Dean Finkelstein",
+          "kind": "CspTrustedSite"
+        },
+        {
+          "name": "MIAW",
+          "modified": "2026-10-16",
+          "by": "Dean Finkelstein",
+          "kind": "CspTrustedSite"
+        },
+        {
+          "name": "Slack",
+          "modified": "2026-10-16",
+          "by": "Automated Process",
+          "kind": "CspTrustedSite"
+        },
+        {
+          "name": "s3_us_west_2_amazonaws_com",
+          "modified": "2026-10-16",
+          "by": "Dean Finkelstein",
+          "kind": "CspTrustedSite"
+        },
+        {
+          "name": "Visualforce",
+          "modified": "2026-10-16",
+          "by": "Dean Finkelstein",
+          "kind": "CspTrustedSite"
+        },
+        {
+          "name": "S3",
+          "modified": "2026-10-16",
+          "by": "Dean Finkelstein",
+          "kind": "CspTrustedSite"
+        }
+      ]
+    },
+    {
+      "id": "certificates",
+      "title": "Certificates",
+      "why": "Certificates copy over, but anything signed for the old sandbox domain or a sandbox-only integration needs checking.",
+      "action": "Confirm each certificate is still valid for its purpose after the refresh.",
+      "count": 0,
+      "items": []
+    },
+    {
+      "id": "sites",
+      "title": "Sites and Experience Cloud sites",
+      "why": "Site definitions copy over. Domains, guest user settings, and any sandbox-only site configuration need checking.",
+      "action": "Note each site, its domain, and its guest user profile. Test guest access after the refresh.",
+      "count": 4,
+      "items": [
+        {
+          "name": "coral_cloud",
+          "modified": "2026-10-17",
+          "by": "Dean Finkelstein",
+          "kind": "CustomSite"
+        },
+        {
+          "name": "ESW_ESA_Web_Deployment_1724800920657",
+          "modified": "2026-10-17",
+          "by": "Dean Finkelstein",
+          "kind": "CustomSite"
+        },
+        {
+          "name": "ESW_ESA_Web_Deployment_1724800920657",
+          "modified": "2026-10-16",
+          "by": "Dean Finkelstein",
+          "kind": "Network"
+        },
+        {
+          "name": "coral-cloud",
+          "modified": "2026-10-16",
+          "by": "Dean Finkelstein",
+          "kind": "Network"
+        }
+      ]
+    },
+    {
+      "id": "custom-settings",
+      "title": "Custom setting data",
+      "why": "Custom setting records are data. A refresh replaces them with Production values. Sandbox-only values (test endpoints, feature switches, kill switches) are lost.",
+      "action": "Export each custom setting now. Re-import the sandbox-only values after the refresh.",
+      "count": 0,
+      "items": []
+    },
+    {
+      "id": "custom-metadata",
+      "title": "Custom metadata records",
+      "why": "Custom metadata copies over from Production, overwriting any sandbox-only record values.",
+      "action": "Retrieve custom metadata to source control before the refresh so sandbox-only values can be redeployed.",
+      "count": 0,
+      "items": []
+    },
+    {
+      "id": "integration-users",
+      "title": "Users that look like integration or service accounts",
+      "why": "After a refresh every user email gets .invalid appended, passwords are reset, and sessions end. Human users notice. Integration users fail silently at 2 a.m.",
+      "action": "For each one: who owns it, how it authenticates, and who resets it after the refresh.",
+      "count": 3,
+      "items": [
+        {
+          "name": "Dean Finkelstein",
+          "username": "user-1@redacted.example",
+          "profile": "System Administrator",
+          "lastLogin": "2026-10-17"
+        },
+        {
+          "name": "Integration User",
+          "username": "user-2@redacted.example",
+          "profile": "Analytics Cloud Integration User",
+          "lastLogin": ""
+        },
+        {
+          "name": "EinsteinServiceAgent User",
+          "username": "user-3@redacted.example",
+          "profile": "Custom Einstein Agent User",
+          "lastLogin": ""
+        }
+      ]
+    },
+    {
+      "id": "recent-setup-changes",
+      "title": "Setup changes in the last 90 days",
+      "why": "Configuration done in the sandbox and not yet in source control is overwritten by the refresh. The audit trail shows what changed and who did it.",
+      "action": "Check each change against source control. Retrieve anything missing before the refresh.",
+      "count": 41,
+      "items": [
+        {
+          "when": "2026-10-17",
+          "section": "Manage Users",
+          "action": "changedpassword",
+          "detail": "Set new password for user Dean Finkelstein (UserID: [005aj00000gAb69])",
+          "by": "Dean Finkelstein"
+        },
+        {
+          "when": "2026-10-17",
+          "section": "Manage Users",
+          "action": "changedUserEmailVerifiedStatusVerified",
+          "detail": "For user user-1@redacted.example, the User Verified Email status changed to verified",
+          "by": "Automated Process"
+        },
+        {
+          "when": "2026-10-17",
+          "section": null,
+          "action": "einsteinGPTPlatformEnabledOffOn",
+          "detail": "Organization setup action: einsteinGPTPlatformEnabledOffOn has changed.",
+          "by": "Automated Process"
+        },
+        {
+          "when": "2026-10-17",
+          "section": null,
+          "action": "agentPlatformEnabledOffOn",
+          "detail": "Organization setup action: agentPlatformEnabledOffOn has changed.",
+          "by": "Automated Process"
+        },
+        {
+          "when": "2026-10-17",
+          "section": null,
+          "action": "value_MAX_STREAMING_TOPICS_PROV",
+          "detail": "Max number of streaming topics"
+        },
+        {
+          "when": "2026-10-17",
+          "section": null,
+          "action": "reqFirstPartyUseOfCookiesOnOff",
+          "detail": "Disabled the My Domain policy Require first-party use of Salesforce cookies",
+          "by": "Dean Finkelstein"
+        },
+        {
+          "when": "2026-10-17",
+          "section": null,
+          "action": "inviteCsnUserEnabledOnOff",
+          "detail": "Organization setup action: inviteCsnUserEnabledOnOff has changed.",
+          "by": "Dean Finkelstein"
+        },
+        {
+          "when": "2026-10-16",
+          "section": "Permission Set Group",
+          "action": "PermSetGroupUserPermEnabled",
+          "detail": "Changed permission set group SetupWithAgentforceUserPsg: ExecutePromptTemplates permission was changed from disabled to enabled"
+        },
+        {
+          "when": "2026-10-16",
+          "section": "Permission Set Group",
+          "action": "PermSetGroupUserPermEnabled",
+          "detail": "Changed permission set group SetupWithAgentforceUserPsg: EinsteinMetadataUserAccess permission was changed from disabled to enabled"
+        },
+        {
+          "when": "2026-10-16",
+          "section": "Permission Set Group",
+          "action": "PermissionSetGroupCalculationComplete",
+          "detail": "Permission set group calculation completed : SetupWithAgentforceUserPsg"
+        },
+        {
+          "when": "2026-10-16",
+          "section": "Permission Set Group",
+          "action": "PermSetGroupUserPermEnabled",
+          "detail": "Changed permission set group SetupWithAgentforceUserPsg: UseSetupWithAgentforce permission was changed from disabled to enabled"
+        },
+        {
+          "when": "2026-10-16",
+          "section": "Permission Set Group",
+          "action": "PermissionSetGroupCalculationStarted",
+          "detail": "Permission set group calculation started : SetupWithAgentforceUserPsg"
+        },
+        {
+          "when": "2026-10-16",
+          "section": "Permission Set Group",
+          "action": "PermissionSetGroupCalculationComplete",
+          "detail": "Permission set group calculation completed : SalesCloudSeller"
+        },
+        {
+          "when": "2026-10-16",
+          "section": "Permission Set Group",
+          "action": "PermissionSetGroupCalculationStarted",
+          "detail": "Permission set group calculation started : SalesCloudSeller"
+        },
+        {
+          "when": "2026-10-16",
+          "section": "Permission Set Group",
+          "action": "PermSetGroupUserPermEnabled",
+          "detail": "Changed permission set group SalesCloudSeller: ViewOnlyEmbeddedAppUser permission was changed from disabled to enabled"
+        },
+        {
+          "when": "2026-10-16",
+          "section": "Permission Set Group",
+          "action": "PermSetGroupUserPermEnabled",
+          "detail": "Changed permission set group SalesCloudSeller: StdAutomaticActivityCapture permission was changed from disabled to enabled"
+        },
+        {
+          "when": "2026-10-16",
+          "section": "Manage Users",
+          "action": "PermSetEnableUserPerm",
+          "detail": "Changed permission set Platform Metabolism Slagent Permset: View Roles and Role Hierarchy permission was changed from disabled to enabled",
+          "by": "Automated Process"
+        },
+        {
+          "when": "2026-10-16",
+          "section": "Manage Users",
+          "action": "PermSetEnableUserPerm",
+          "detail": "Changed permission set Platform Metabolism Slagent Permset: Manage AI Agents permission was changed from disabled to enabled",
+          "by": "Automated Process"
+        },
+        {
+          "when": "2026-10-16",
+          "section": "Manage Users",
+          "action": "PermSetAssign",
+          "detail": "Permission set Platform Metabolism Slagent Permset: assigned to user Platform Integration User (UserID: [005aj00000gAb7p])",
+          "by": "Automated Process"
+        },
+        {
+          "when": "2026-10-16",
+          "section": "Manage Users",
+          "action": "PermSetEnableUserPerm",
+          "detail": "Changed permission set Platform Metabolism Slagent Permset: View Setup and Configuration permission was changed from disabled to enabled",
+          "by": "Automated Process"
+        },
+        {
+          "when": "2026-10-16",
+          "section": "Manage Users",
+          "action": "PermSetCreate",
+          "detail": "Created permission set Platform Metabolism Slagent Permset: with User License Cloud Integration User",
+          "by": "Automated Process"
+        },
+        {
+          "when": "2026-10-16",
+          "section": "Lightning Pages",
+          "action": "createdFlexiPage",
+          "detail": "Created Lightning Page: Command Center App Utility Bar",
+          "by": "Automated Process"
+        },
+        {
+          "when": "2026-10-16",
+          "section": "Field Restriction Rule",
+          "action": "abacRuleUpdatedGeneral",
+          "detail": "Updated user rule Rule49e92ad5826b458cf1fd8c22a20d593e9c0be0d16944a7b45c8d753caaef124b.",
+          "by": "Automated Process"
+        },
+        {
+          "when": "2026-10-16",
+          "section": "Permission Set Group",
+          "action": "PermSetGroupUserPermEnabled",
+          "detail": "Changed permission set group SalesCloudCallCoachingSeller: ViewOnlyEmbeddedAppUser permission was changed from disabled to enabled"
+        },
+        {
+          "when": "2026-10-16",
+          "section": "Permission Set Group",
+          "action": "PermSetGroupUserPermEnabled",
+          "detail": "Changed permission set group SalesCloudCallCoachingSeller: StdAutomaticActivityCapture permission was changed from disabled to enabled"
+        },
+        {
+          "when": "2026-10-16",
+          "section": "Permission Set Group",
+          "action": "PermissionSetGroupCalculationComplete",
+          "detail": "Permission set group calculation completed : SalesCloudCallCoachingSeller"
+        },
+        {
+          "when": "2026-10-16",
+          "section": "Permission Set Group",
+          "action": "PermissionSetGroupCreate",
+          "detail": "Created permission set group SetupWithAgentforceUserPsg"
+        },
+        {
+          "when": "2026-10-16",
+          "section": "Permission Set Group",
+          "action": "PermissionSetGroupCalculationStarted",
+          "detail": "Permission set group calculation started : SalesCloudCallCoachingSeller"
+        },
+        {
+          "when": "2026-10-16",
+          "section": "Permission Set Group",
+          "action": "PermissionSetGroupCreate",
+          "detail": "Created permission set group SalesCloudCallCoachingSeller"
+        },
+        {
+          "when": "2026-10-16",
+          "section": "Permission Set Group",
+          "action": "PermissionSetGroupCreate",
+          "detail": "Created permission set group SalesCloudSeller"
+        },
+        {
+          "when": "2026-10-16",
+          "section": null,
+          "action": "value_MAX_STREAMING_TOPICS_PROV",
+          "detail": "Max number of streaming topics"
+        },
+        {
+          "when": "2026-10-16",
+          "section": null,
+          "action": "scoringFrameworkOrgPrefOffOn",
+          "detail": "Organization setup action: scoringFrameworkOrgPrefOffOn has changed."
+        },
+        {
+          "when": "2026-10-16",
+          "section": null,
+          "action": "tableauSlackCollabEnabledOffOn",
+          "detail": "Organization setup action: tableauSlackCollabEnabledOffOn has changed.",
+          "by": "Automated Process"
+        },
+        {
+          "when": "2026-10-16",
+          "section": null,
+          "action": "value_ORG_CREATED_ON_VERSION",
+          "detail": "Changed OrgCreatedOnVersion from 264.0 to 264.0",
+          "by": "Dean Finkelstein"
+        },
+        {
+          "when": "2026-10-16",
+          "section": "Event Manager",
+          "action": "eventManagerEventDestinationEnableStore",
+          "detail": "Automated Process enabled storing on Security Defense Action Event.",
+          "by": "Automated Process"
+        },
+        {
+          "when": "2026-10-16",
+          "section": "Sharing Defaults",
+          "action": "externalSharingModelEnabled",
+          "detail": "Enabled External Sharing Model",
+          "by": "Dean Finkelstein"
+        },
+        {
+          "when": "2026-10-16",
+          "section": null,
+          "action": "value_CASE_FEEDS_JOB_STATUS",
+          "detail": "Case Feeds Job Status",
+          "by": "Dean Finkelstein"
+        },
+        {
+          "when": "2026-10-16",
+          "section": "Experiences Setup",
+          "action": "changedNetworksOn",
+          "detail": "Experiences enabled",
+          "by": "Dean Finkelstein"
+        },
+        {
+          "when": "2026-10-16",
+          "section": null,
+          "action": "value_CASE_FEEDS_PROCESSING_STATE",
+          "detail": "Case Feeds Processing State",
+          "by": "Dean Finkelstein"
+        },
+        {
+          "when": "2026-10-16",
+          "section": "Sharing Defaults",
+          "action": "secureGuestUserRecordAccessEnabled",
+          "detail": "Enabled Secure Guest User Record Access",
+          "by": "Dean Finkelstein"
+        },
+        {
+          "when": "2026-10-16",
+          "section": null,
+          "action": "enablementEnabledOffOn",
+          "detail": "Organization setup action: enablementEnabledOffOn has changed.",
+          "by": "Dean Finkelstein"
+        }
+      ]
+    },
+    {
+      "id": "event-subscribers",
+      "title": "Platform event and change data capture subscribers",
+      "why": "External subscribers hold replay positions for this org copy. After the refresh they reconnect to a new org with new IDs.",
+      "action": "Tell each subscriber owner to reset replay IDs after the refresh.",
+      "count": 0,
+      "items": []
+    },
+    {
+      "id": "email-services",
+      "title": "Email services",
+      "why": "Email service addresses are regenerated with the new sandbox domain. Anything that sends mail to them points at a dead address.",
+      "action": "Record each address and who sends to it. Update the senders after the refresh.",
+      "count": 0,
+      "items": []
+    },
+    {
+      "id": "custom-object-data",
+      "title": "Custom object record counts",
+      "why": "A Full or Partial refresh replaces data. Records that exist only in the sandbox (test data, in-progress configuration data) are gone. Developer and Developer Pro sandboxes keep no data at all.",
+      "action": "Export anything you need to keep. Decide per object.",
+      "count": 4,
+      "items": [
+        {
+          "object": "Booking__c",
+          "label": "Booking",
+          "records": 8656
+        },
+        {
+          "object": "Experience__c",
+          "label": "Experience",
+          "records": 54
+        },
+        {
+          "object": "Guest_Review__c",
+          "label": "Guest Review",
+          "records": 10
+        },
+        {
+          "object": "Session__c",
+          "label": "Experience Session",
+          "records": 6102
+        }
+      ]
+    }
+  ],
+  "manual": [
+    "Email deliverability: a refreshed sandbox is set to System email only. Decide whether to raise it, and tell testers.",
+    "Email masking: user emails get .invalid appended. Fix the handful that need real mail (integration owners, testers).",
+    "Outbound messages, callouts, and webhooks: any endpoint that pointed at the old sandbox URL (My Domain changes) must be updated on the other side.",
+    "Login IP ranges and trusted IPs on profiles: confirm they match what the sandbox users need.",
+    "Debug logs, trace flags, and Apex test settings: all reset.",
+    "Data masking or Data Mask templates: rerun after the refresh if the client requires it.",
+    "Installed package license assignments: recheck user assignments after the refresh.",
+    "Report and dashboard subscriptions: recreate.",
+    "Sandbox post-copy script (an Apex class implementing SandboxPostCopy): the right place to automate everything above that repeats. If there is none, that is a finding too."
+  ]
+}

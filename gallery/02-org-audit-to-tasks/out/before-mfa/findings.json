@@ -1,0 +1,390 @@
+{
+  "org": "resume-dev",
+  "run": "2026-10-17T04:39:32.049Z",
+  "staleDays": 90,
+  "minApi": 55,
+  "redacted": true,
+  "checks": [
+    {
+      "check": "Users with Modify All Data or View All Data",
+      "findings": 2,
+      "seconds": 2.8
+    },
+    {
+      "check": "Active users with no login in 90 days",
+      "findings": 4,
+      "seconds": 2.8
+    },
+    {
+      "check": "Workflow rules and Process Builder still active",
+      "findings": 0,
+      "seconds": 5.5
+    },
+    {
+      "check": "Active flows below API 55",
+      "findings": 0,
+      "seconds": 2.8
+    },
+    {
+      "check": "Apex classes and triggers below API 55",
+      "findings": 0,
+      "seconds": 5.5
+    },
+    {
+      "check": "Org-wide Apex test coverage",
+      "findings": 1,
+      "seconds": 2.8
+    },
+    {
+      "check": "Inactive validation rules",
+      "findings": 0,
+      "seconds": 2.8
+    },
+    {
+      "check": "Custom fields without a description",
+      "findings": 10,
+      "seconds": 5.5
+    },
+    {
+      "check": "Reports not run in a year",
+      "findings": 1,
+      "seconds": 2.8
+    },
+    {
+      "check": "Security Health Check",
+      "findings": 18,
+      "seconds": 7.6
+    },
+    {
+      "check": "Org limits above 80 percent",
+      "findings": 0,
+      "seconds": 2.8
+    }
+  ],
+  "findings": [
+    {
+      "id": "F-001",
+      "check": "Broad data access",
+      "severity": "high",
+      "component": "User Dean Finkelstein (user-1@redacted.example)",
+      "detail": "Modify All Data via profile System Administrator",
+      "recommendation": "Confirm the business need. Move to a narrower permission set, or document the exception with an owner and a review date.",
+      "effort": "S"
+    },
+    {
+      "id": "F-002",
+      "check": "Broad data access",
+      "severity": "high",
+      "component": "User Integration User (user-2@redacted.example)",
+      "detail": "View All Data via profile Analytics Cloud Integration User",
+      "recommendation": "Confirm the business need. Move to a narrower permission set, or document the exception with an owner and a review date.",
+      "effort": "S"
+    },
+    {
+      "id": "F-019",
+      "check": "Security setting",
+      "severity": "high",
+      "component": "SessionSettings: Enable clickjack protection for customer Visualforce pages with standard headers",
+      "detail": "Org value Disabled, baseline Enabled; overall score 64",
+      "recommendation": "Align with the baseline unless there is a documented reason not to. Record the reason if you keep the current value.",
+      "effort": "S"
+    },
+    {
+      "id": "F-020",
+      "check": "Security setting",
+      "severity": "high",
+      "component": "SessionSettings: Enable clickjack protection for customer Visualforce pages with headers disabled",
+      "detail": "Org value Disabled, baseline Enabled; overall score 64",
+      "recommendation": "Align with the baseline unless there is a documented reason not to. Record the reason if you keep the current value.",
+      "effort": "S"
+    },
+    {
+      "id": "F-021",
+      "check": "Security setting",
+      "severity": "high",
+      "component": "SessionSettings: Require HttpOnly attribute",
+      "detail": "Org value Disabled, baseline Enabled; overall score 64",
+      "recommendation": "Align with the baseline unless there is a documented reason not to. Record the reason if you keep the current value.",
+      "effort": "S"
+    },
+    {
+      "id": "F-022",
+      "check": "Security setting",
+      "severity": "high",
+      "component": "Identity: MFA Enabled",
+      "detail": "Org value Disabled, baseline MFA Enabled; overall score 64",
+      "recommendation": "Align with the baseline unless there is a documented reason not to. Record the reason if you keep the current value.",
+      "effort": "S"
+    },
+    {
+      "id": "F-023",
+      "check": "Security setting",
+      "severity": "high",
+      "component": "NetworkSecurity: Number of trusted IP ranges",
+      "detail": "Org value 0, baseline 1; overall score 64",
+      "recommendation": "Align with the baseline unless there is a documented reason not to. Record the reason if you keep the current value.",
+      "effort": "S"
+    },
+    {
+      "id": "F-026",
+      "check": "Security setting",
+      "severity": "high",
+      "component": "SessionSettings: Enforce login IP ranges on every request",
+      "detail": "Org value Disabled, baseline Enabled; overall score 64",
+      "recommendation": "Align with the baseline unless there is a documented reason not to. Record the reason if you keep the current value.",
+      "effort": "S"
+    },
+    {
+      "id": "F-027",
+      "check": "Security setting",
+      "severity": "high",
+      "component": "SessionSettings: Terminate all of a user's sessions when an admin resets that user's password",
+      "detail": "Org value Disabled, baseline Enabled; overall score 64",
+      "recommendation": "Align with the baseline unless there is a documented reason not to. Record the reason if you keep the current value.",
+      "effort": "S"
+    },
+    {
+      "id": "F-028",
+      "check": "Security setting",
+      "severity": "high",
+      "component": "PasswordPolicies: Require a minimum 1 day password lifetime",
+      "detail": "Org value Disabled, baseline Enabled; overall score 64",
+      "recommendation": "Align with the baseline unless there is a documented reason not to. Record the reason if you keep the current value.",
+      "effort": "S"
+    },
+    {
+      "id": "F-030",
+      "check": "Security setting",
+      "severity": "high",
+      "component": "SessionSettings: Require identity verification for email address changes",
+      "detail": "Org value Disabled, baseline Enabled; overall score 64",
+      "recommendation": "Align with the baseline unless there is a documented reason not to. Record the reason if you keep the current value.",
+      "effort": "S"
+    },
+    {
+      "id": "F-031",
+      "check": "Security setting",
+      "severity": "high",
+      "component": "PasswordPolicies: Obscure secret answer for password resets",
+      "detail": "Org value Disabled, baseline Enabled; overall score 64",
+      "recommendation": "Align with the baseline unless there is a documented reason not to. Record the reason if you keep the current value.",
+      "effort": "S"
+    },
+    {
+      "id": "F-033",
+      "check": "Security setting",
+      "severity": "high",
+      "component": "AdminUsers: Percentage of active internal users with System Administrator profile",
+      "detail": "Org value 20.00%, baseline 5.00%; overall score 64",
+      "recommendation": "Align with the baseline unless there is a documented reason not to. Record the reason if you keep the current value.",
+      "effort": "S"
+    },
+    {
+      "id": "F-034",
+      "check": "Security setting",
+      "severity": "high",
+      "component": "UserPIISettings: Require permission to view record names in lookup fields",
+      "detail": "Org value Disabled, baseline Enabled; overall score 64",
+      "recommendation": "Align with the baseline unless there is a documented reason not to. Record the reason if you keep the current value.",
+      "effort": "S"
+    },
+    {
+      "id": "F-035",
+      "check": "Security setting",
+      "severity": "high",
+      "component": "Identity: SAML Enabled",
+      "detail": "Org value Disabled, baseline SAML Enabled; overall score 64",
+      "recommendation": "Align with the baseline unless there is a documented reason not to. Record the reason if you keep the current value.",
+      "effort": "S"
+    },
+    {
+      "id": "F-007",
+      "check": "Test coverage",
+      "severity": "high",
+      "component": "Org-wide Apex coverage",
+      "detail": "0% covered (deployments to production require 75%)",
+      "recommendation": "Run all tests, list the classes with the lowest coverage, add meaningful assertions starting with the most-changed classes.",
+      "effort": "L"
+    },
+    {
+      "id": "F-003",
+      "check": "License waste",
+      "severity": "medium",
+      "component": "User Integration User (user-2@redacted.example)",
+      "detail": "License Analytics Cloud Integration User; last login never",
+      "recommendation": "Confirm with the manager, then freeze or deactivate and reclaim the license. Check first whether it is an integration user.",
+      "effort": "S"
+    },
+    {
+      "id": "F-004",
+      "check": "License waste",
+      "severity": "medium",
+      "component": "User EinsteinServiceAgent User (user-3@redacted.example)",
+      "detail": "License Einstein Agent; last login never",
+      "recommendation": "Confirm with the manager, then freeze or deactivate and reclaim the license. Check first whether it is an integration user.",
+      "effort": "S"
+    },
+    {
+      "id": "F-005",
+      "check": "License waste",
+      "severity": "medium",
+      "component": "User Security User (user-4@redacted.example)",
+      "detail": "License Analytics Cloud Integration User; last login never",
+      "recommendation": "Confirm with the manager, then freeze or deactivate and reclaim the license. Check first whether it is an integration user.",
+      "effort": "S"
+    },
+    {
+      "id": "F-006",
+      "check": "License waste",
+      "severity": "medium",
+      "component": "User Coral Cloud Agent (user-5@redacted.example)",
+      "detail": "License Salesforce; last login never",
+      "recommendation": "Confirm with the manager, then freeze or deactivate and reclaim the license. Check first whether it is an integration user.",
+      "effort": "S"
+    },
+    {
+      "id": "F-024",
+      "check": "Security setting",
+      "severity": "medium",
+      "component": "PasswordPolicies: Maximum invalid login attempts",
+      "detail": "Org value 10, baseline 3; overall score 64",
+      "recommendation": "Align with the baseline unless there is a documented reason not to. Record the reason if you keep the current value.",
+      "effort": "S"
+    },
+    {
+      "id": "F-025",
+      "check": "Security setting",
+      "severity": "medium",
+      "component": "SharingSettings: Number of Objects with Default External Access Set to Public",
+      "detail": "Org value 1, baseline 0; overall score 64",
+      "recommendation": "Align with the baseline unless there is a documented reason not to. Record the reason if you keep the current value.",
+      "effort": "S"
+    },
+    {
+      "id": "F-029",
+      "check": "Security setting",
+      "severity": "medium",
+      "component": "PasswordPolicies: Password complexity requirement",
+      "detail": "Org value Must include alpha and numeric characters, baseline Must include alpha, numeric, and special characters; overall score 64",
+      "recommendation": "Align with the baseline unless there is a documented reason not to. Record the reason if you keep the current value.",
+      "effort": "S"
+    },
+    {
+      "id": "F-032",
+      "check": "Security setting",
+      "severity": "medium",
+      "component": "PasswordPolicies: Lockout effective period",
+      "detail": "Org value 15 minutes, baseline 30 minutes; overall score 64",
+      "recommendation": "Align with the baseline unless there is a documented reason not to. Record the reason if you keep the current value.",
+      "effort": "S"
+    },
+    {
+      "id": "F-036",
+      "check": "Security setting",
+      "severity": "medium",
+      "component": "SessionSettings: Lock sessions to the IP address from which they originated",
+      "detail": "Org value Disabled, baseline Enabled; overall score 64",
+      "recommendation": "Align with the baseline unless there is a documented reason not to. Record the reason if you keep the current value.",
+      "effort": "S"
+    },
+    {
+      "id": "F-008",
+      "check": "Documentation gap",
+      "severity": "low",
+      "component": "Object Account",
+      "detail": "7 custom field(s) without a description",
+      "recommendation": "Add a one-line description to each field: what it holds, who sets it, and what reads it.",
+      "effort": "S"
+    },
+    {
+      "id": "F-009",
+      "check": "Documentation gap",
+      "severity": "low",
+      "component": "Object Case",
+      "detail": "4 custom field(s) without a description",
+      "recommendation": "Add a one-line description to each field: what it holds, who sets it, and what reads it.",
+      "effort": "S"
+    },
+    {
+      "id": "F-010",
+      "check": "Documentation gap",
+      "severity": "low",
+      "component": "Object Contact",
+      "detail": "8 custom field(s) without a description",
+      "recommendation": "Add a one-line description to each field: what it holds, who sets it, and what reads it.",
+      "effort": "S"
+    },
+    {
+      "id": "F-011",
+      "check": "Documentation gap",
+      "severity": "low",
+      "component": "Object Lead",
+      "detail": "5 custom field(s) without a description",
+      "recommendation": "Add a one-line description to each field: what it holds, who sets it, and what reads it.",
+      "effort": "S"
+    },
+    {
+      "id": "F-012",
+      "check": "Documentation gap",
+      "severity": "low",
+      "component": "Object Opportunity",
+      "detail": "5 custom field(s) without a description",
+      "recommendation": "Add a one-line description to each field: what it holds, who sets it, and what reads it.",
+      "effort": "S"
+    },
+    {
+      "id": "F-013",
+      "check": "Documentation gap",
+      "severity": "low",
+      "component": "Object Goal",
+      "detail": "1 custom field(s) without a description",
+      "recommendation": "Add a one-line description to each field: what it holds, who sets it, and what reads it.",
+      "effort": "S"
+    },
+    {
+      "id": "F-014",
+      "check": "Documentation gap",
+      "severity": "low",
+      "component": "Object Metric",
+      "detail": "1 custom field(s) without a description",
+      "recommendation": "Add a one-line description to each field: what it holds, who sets it, and what reads it.",
+      "effort": "S"
+    },
+    {
+      "id": "F-015",
+      "check": "Documentation gap",
+      "severity": "low",
+      "component": "Object Booking__c",
+      "detail": "3 custom field(s) without a description",
+      "recommendation": "Add a one-line description to each field: what it holds, who sets it, and what reads it.",
+      "effort": "S"
+    },
+    {
+      "id": "F-016",
+      "check": "Documentation gap",
+      "severity": "low",
+      "component": "Object Guest_Review__c",
+      "detail": "1 custom field(s) without a description",
+      "recommendation": "Add a one-line description to each field: what it holds, who sets it, and what reads it.",
+      "effort": "S"
+    },
+    {
+      "id": "F-017",
+      "check": "Documentation gap",
+      "severity": "low",
+      "component": "Object Session__c",
+      "detail": "3 custom field(s) without a description",
+      "recommendation": "Add a one-line description to each field: what it holds, who sets it, and what reads it.",
+      "effort": "S"
+    },
+    {
+      "id": "F-018",
+      "check": "Unused configuration",
+      "severity": "low",
+      "component": "102 report(s)",
+      "detail": "Not run in 365 days or never run. Examples: Exercise Completion Status by Section, Exercise Completion Status, Exercise Completion by Days to Complete, Exercise Completion by User, Milestone Completion Status",
+      "recommendation": "Move to an archive folder for 90 days, then delete what nobody asked for.",
+      "effort": "M"
+    }
+  ]
+}

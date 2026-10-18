@@ -1,0 +1,34 @@
+{
+  // Ask this resume: the Worker behind the chat panel on Dean Finkelstein's resume page.
+  // Secrets never live here. Set the API key with:  npx wrangler secret put ANTHROPIC_API_KEY
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ask-this-resume",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-17",
+  "compatibility_flags": ["nodejs_compat"],
+  "upload_source_maps": true,
+  "observability": {
+    "enabled": true,
+    "logs": { "enabled": true, "head_sampling_rate": 1 },
+    "traces": { "enabled": true, "head_sampling_rate": 0.1 }
+  },
+  // Create the namespace once:  npx wrangler kv namespace create RATE_KV
+  // then paste the id it prints here.
+  "kv_namespaces": [
+    { "binding": "RATE_KV", "id": "REPLACE_WITH_KV_NAMESPACE_ID" }
+  ],
+  "rules": [
+    { "type": "Text", "globs": ["**/*.txt"] }
+  ],
+  "vars": {
+    // Comma-separated list of page origins allowed to call /ask. Add the GitHub Pages origin when the page is hosted.
+    "ALLOWED_ORIGINS": "https://deanfinkelstein.github.io,http://localhost:8788",
+    // Model for the assistant. Opus 5.5 is the default; set to claude-haiku-5-5 to cut cost by roughly forty times per token.
+    "MODEL": "claude-opus-5-5",
+    // Spend guards. Per visitor per hour, and for everyone per UTC day.
+    "PER_IP_PER_HOUR": "12",
+    "DAILY_CAP": "300",
+    // Salt for hashing visitor IPs before they touch KV. Not a secret, just keeps raw IPs out of storage.
+    "IP_SALT": "resume-2026"
+  }
+}
