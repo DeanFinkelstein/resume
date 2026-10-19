@@ -16,3 +16,6 @@ worker-configuration.d.ts
 
 # Raw Salesforce plan traces include Salesforce's internal planner prompts: kept local, not published
 gallery/01-agentforce-resume-agent/out/**/trace-*.json
+
+# Original demo recording: kept local only (its clipboard panel showed private text)
+gallery/01-agentforce-resume-agent/demo-original.mp4
