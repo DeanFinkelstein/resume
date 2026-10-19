@@ -8,13 +8,19 @@ const C = require('./content');
 
 const outDir = process.argv[2] || '.';
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const attr = s => esc(s).replace(/"/g, '&quot;');
 const pair = o => `<span class="t">${esc(o.t)}</span><span class="p">${esc(o.p)}</span>`;
 const src = s => s ? `<span class="src">${esc(s)}</span>` : '';
 const aiCls = o => (o && o.ai) ? ' class="ai"' : '';
 
 const ACCENT = '#e69138';      // rules, fills, markers
 const ACCENT_TEXT = '#9a5a12'; // accent-colored text: 5.46:1 on white, where ACCENT is 2.48:1
-const today = '2026-10-14';
+// Build date in local time: the footer, the copy-as-Markdown text, and resume.json say when the page was last built.
+const now = new Date();
+const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+// The files the header buttons download. The build writes the Word copy; the PDF is printed from this page (see README.md).
+const PDF_TECH = 'Dean Finkelstein - Resume (Technical).pdf';
+const WORD = 'Dean Finkelstein - Resume.docx';
 
 // ---------------------------------------------------------------- markdown (for the copy button)
 function mdFor(reg) {
@@ -63,7 +69,8 @@ const jsonLd = {
   worksFor: { '@type': 'Organization', name: 'Cirrius Solutions Inc.' },
   email: `mailto:${C.contact[1]}`,
   address: { '@type': 'PostalAddress', addressLocality: 'Matamoras', addressRegion: 'PA', addressCountry: 'US' },
-  url: 'https://www.linkedin.com/in/deanfinkelstein/',
+  url: C.site.href,
+  sameAs: ['https://www.linkedin.com/in/deanfinkelstein/'],
   alumniOf: { '@type': 'CollegeOrUniversity', name: 'Western Governors University' },
   hasCredential: C.certifications.map(c => ({ '@type': 'EducationalOccupationalCredential', name: c.name, credentialCategory: 'certification', dateCreated: c.date, identifier: c.id })),
   knowsAbout: ['Salesforce', 'Managed Services', 'CRM Analytics', 'Tableau', 'Field Service', 'Claude Code', 'MCP', 'Agentforce'],
@@ -86,6 +93,18 @@ const head = `<!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
 <title>Dean Finkelstein - Resume</title>
+<meta name="description" content="${attr(C.site.description)}">
+<link rel="canonical" href="${attr(C.site.href)}">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:url" content="${attr(C.site.href)}">
+<meta property="og:title" content="Dean Finkelstein - Resume">
+<meta property="og:description" content="${attr(C.site.description)}">
+<meta property="og:image" content="${attr(C.site.href + C.site.card.file)}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="${attr(C.site.card.alt)}">
+<meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">${jsonSafe(jsonLd)}</script>
 <style>
 :root{--ink:#1f2328;--muted:#5b6670;--rule:#d9dee3;--accent:${ACCENT};--accent-text:${ACCENT_TEXT};--soft:#fff7ee;--soft2:#f0d2b3;
@@ -116,6 +135,11 @@ h1{font-size:34px;line-height:1.1;margin:0 0 4px}
 .btn:hover{border-color:var(--accent)}
 .btn[aria-pressed="true"]{background:var(--soft);border-color:var(--accent);font-weight:700}
 .hint{font-size:12.5px;color:var(--muted);text-align:right;max-width:320px}
+.cta{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 0}
+a.btn{display:inline-block;font-size:14px;font-weight:700;padding:7px 13px}
+a.btn.primary{background:var(--accent);border-color:var(--accent);color:#111}
+a.btn.primary:hover{filter:brightness(1.05)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 .print-note,.print-url,#proof{display:none}
 
 section{margin:0 0 20px}
@@ -154,6 +178,18 @@ li::marker{color:var(--accent)}
 .dg .rule{font-size:11px;fill:#7a4a12}
 .dg .ln{stroke:#9aa5ad;stroke-width:1.3;fill:none}
 .dg .cap{font-size:11.5px;fill:var(--muted)}
+/* the same loop as a stacked list, shown in place of the diagram on narrow screens */
+.dg-list{display:none;margin:6px 0 10px}
+.dg-step{border:1px solid var(--rule);border-radius:6px;padding:8px 12px}
+.dg-step.core{background:var(--soft);border-color:var(--accent)}
+.dg-step h3{margin:0 0 4px;font-size:12.5px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+.dg-step.core h3{font-size:16px;letter-spacing:0;text-transform:none;color:var(--ink)}
+.dg-step ul{list-style:none;padding:0;margin:0}
+.dg-step li{margin:0 0 4px;font-size:14px}
+.dg-step li span{display:block;font-size:13px;color:var(--muted)}
+.dg-step .rule{color:#7a4a12}
+.dg-arrow{text-align:center;color:#9aa5ad;line-height:1;margin:3px 0}
+.dg-list .cap{margin:6px 0 0;font-size:12.5px;color:var(--muted)}
 .practice{list-style:none;padding:0;margin:0}
 .practice li{padding-left:14px;position:relative}
 .practice li::before{content:"";position:absolute;left:0;top:.55em;width:6px;height:6px;border-radius:50%;background:var(--accent)}
@@ -165,6 +201,11 @@ li::marker{color:var(--accent)}
 .gcard p{margin:0;font-size:14px}
 .gcard .proof{font-family:var(--mono);font-size:11.5px;color:#7a4a12}
 .gcard a.open{align-self:flex-start;margin-top:auto;font-size:13.5px;font-weight:700}
+.gcard.wide{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:10px 18px;align-items:start}
+.gcard .gtext{display:flex;flex-direction:column;gap:6px;height:100%}
+.gcard figure{margin:0}
+.gcard video{display:block;width:100%;height:auto;border:1px solid var(--rule);border-radius:6px;background:#f3f4f6}
+.gcard figcaption{margin-top:4px;font-size:12.5px;color:var(--muted)}
 /* how this page was built */
 .pipeline{list-style:none;padding:10px 12px;margin:6px 0 8px;background:#f7f8fa;border:1px solid var(--rule);border-radius:6px;font-family:var(--mono);font-size:12.5px;color:#333}
 .pipeline li{margin:0 0 4px}
@@ -208,8 +249,12 @@ footer p{margin:0 0 4px}
 .disclosure{color:var(--ink)}
 
 @media (max-width:640px){
-  body{font-size:15.5px;padding-top:20px}
+  /* bottom padding keeps the floating Ask button clear of the last lines of the page */
+  body{font-size:15.5px;padding-top:20px;padding-bottom:76px}
   h1{font-size:27px}
+  .dg{display:none}
+  .dg-list{display:block}
+  .gcard.wide{grid-template-columns:1fr}
   .controls{align-items:flex-start}
   .btnrow{justify-content:flex-start}
   .hint{text-align:left}
@@ -222,7 +267,7 @@ footer p{margin:0 0 4px}
 @media print{
   @page{size:Letter;margin:0.55in}
   html,body{background:#fff;max-width:none;padding:0;margin:0;font-size:9.1pt;line-height:1.18;color:#000}
-  .controls,.ask-launch,.ask-panel,.screen-only{display:none !important}
+  .controls,.cta,.ask-launch,.ask-panel,.screen-only{display:none !important}
   .print-note{display:block;margin:0;font-size:8pt;color:#444}
   .print-url{display:inline}
   #proof{display:block}
@@ -246,7 +291,7 @@ footer p{margin:0 0 4px}
   .roles{margin:0 0 2pt;break-after:avoid}
   .certs{columns:2;column-gap:18pt}
   .certs li{margin:0 0 1.5pt}
-  .dg,.pipeline,.links,#ai-practice > p:first-of-type,#gallery{display:none}
+  .dg,.dg-list,.pipeline,.links,#ai-practice > p:first-of-type,#gallery{display:none}
   .practice{columns:2;column-gap:14pt}
   .practice li{break-inside:avoid}
   .practice li{padding-left:10pt}
@@ -271,6 +316,7 @@ const header = `
       <p class="tag">${pair(C.tagline)}</p>
       <p class="contact">${esc(C.contact[0])} · <a href="mailto:${esc(C.contact[1])}">${esc(C.contact[1])}</a> · <a href="https://www.linkedin.com/in/deanfinkelstein/">${esc(C.contact[2])}</a><span class="print-url"> · <a href="${esc(C.site.href)}">${esc(C.site.label)}</a></span></p>
       <p class="avail">${esc(C.availability)}</p>
+      <p class="cta"><a class="btn primary" href="mailto:${attr(C.contact[1])}">Email Dean</a><a class="btn" href="${attr(encodeURI(PDF_TECH))}" download>Download PDF (Technical)</a><a class="btn" href="${attr(encodeURI(WORD))}" download>Download Word</a></p>
       <p class="print-note"><span class="p">Plain English version. The Technical version and the source for each claim are on the web page.</span><span class="t">Technical version. The Plain English version and the source for each claim are on the web page.</span></p>
     </div>
     <div class="controls">
@@ -281,8 +327,9 @@ const header = `
       </div>
       <div class="btnrow">
         <button type="button" class="btn" id="btn-ai" aria-pressed="false">Show the AI work</button>
-        <button type="button" class="btn" id="btn-copy" title="Copies this resume as plain Markdown in the version currently shown">Copy for your AI assistant</button>
+        <button type="button" class="btn" id="btn-copy" aria-describedby="copy-desc">Copy for your AI assistant</button>
       </div>
+      <span class="sr-only" id="copy-desc">Copies this resume as plain Markdown in the version currently shown.</span>
       <div class="hint">Same resume, two ways to read it. Each claim shows where it comes from. The copy button hands the whole thing to whatever tool you use.</div>
     </div>
   </div>
@@ -314,19 +361,43 @@ ${C.skills.map(s => `  <p class="skill${s.ai ? ' ai' : ''}"><span class="lab"><s
 `;
 
 // Inline diagram of the daily loop. Facts only: inputs, the tooling, outputs, the two working rules.
-const box = (x, y, l1, l2, cls = 'box') => `
+// The same facts feed the SVG (wide screens) and the stacked list that replaces it below 640 px.
+const dgInputs = [
+  ['Daily work', 'meetings, tickets, notes, decisions'],
+  ['Client org metadata', 'pulled through VS Code'],
+  ['Audit document', '244 lines of findings'],
+  ['Form requirements', 'Sheet, Doc, or PDF'],
+];
+const dgOutputs = [
+  ['COPs, daily notes, tasks', 'kept current, every day'],
+  ['Package impact analysis', 'every piece of metadata touched'],
+  ['96 ClickUp tasks', 'in about ten minutes, was half a day'],
+  ['Ready-to-run form prompt', 'SharinPix, backed up first'],
+];
+const dgTools = ['MCP (ClickUp, client org)', 'Obsidian: the Thor agent', 'reusable skills'];
+const dgRules = ['Rule 1: let the agent ask questions before it acts', 'Rule 2: back up first'];
+const dgShared = 'Shared with the team: the pattern, demos, and a client AI-security briefing, now a template';
+const dgCaption = 'Source: 2026 self-evaluation. Client names left off on purpose.';
+const box = (x, y, [l1, l2], cls = 'box') => `
     <rect class="${cls}" x="${x}" y="${y}" width="228" height="44" rx="6"/>
     <text class="lbl" x="${x + 12}" y="${y + 18}">${esc(l1)}</text>
     <text class="sub" x="${x + 12}" y="${y + 34}">${esc(l2)}</text>`;
+const dgItems = list => list.map(([l1, l2]) => `<li><b>${esc(l1)}</b><span>${esc(l2)}</span></li>`).join('');
+const diagramList = `
+  <div class="dg-list">
+    <div class="dg-step"><h3>Inputs</h3><ul>${dgItems(dgInputs)}</ul></div>
+    <div class="dg-arrow" aria-hidden="true">&#8595;</div>
+    <div class="dg-step core"><h3>Claude Code</h3><ul>${dgTools.map(t => `<li>+ ${esc(t)}</li>`).join('')}${dgRules.map(r => `<li class="rule">${esc(r)}</li>`).join('')}<li><span>${esc(dgShared)}</span></li></ul></div>
+    <div class="dg-arrow" aria-hidden="true">&#8595;</div>
+    <div class="dg-step"><h3>Outputs</h3><ul>${dgItems(dgOutputs)}</ul></div>
+    <p class="cap">${esc(dgCaption)}</p>
+  </div>`;
 const diagram = `
   <svg class="dg" viewBox="0 0 840 340" role="img" aria-labelledby="dg-title dg-desc">
     <title id="dg-title">How the AI tooling loop runs</title>
     <desc id="dg-desc">Inputs on the left (daily work, client org metadata, an audit document, form requirements) flow into Claude Code with MCP, Obsidian, and reusable skills, and out to kept-current notes and tasks, a package impact analysis, 96 ClickUp tasks, and a ready-to-run form prompt. Two rules sit in the middle: let the agent ask questions before it acts, and back up first.</desc>
     <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#9aa5ad"/></marker></defs>
-    ${box(14, 22, 'Daily work', 'meetings, tickets, notes, decisions')}
-    ${box(14, 96, 'Client org metadata', 'pulled through VS Code')}
-    ${box(14, 170, 'Audit document', '244 lines of findings')}
-    ${box(14, 244, 'Form requirements', 'Sheet, Doc, or PDF')}
+    ${dgInputs.map((b, i) => box(14, 22 + 74 * i, b)).join('')}
     <rect class="core" x="318" y="22" width="204" height="266" rx="8"/>
     <text class="ttl" x="420" y="52" text-anchor="middle">Claude Code</text>
     <text class="sub" x="420" y="76" text-anchor="middle">+ MCP (ClickUp, client org)</text>
@@ -340,10 +411,7 @@ const diagram = `
     <text class="sub" x="420" y="232" text-anchor="middle">Shared with the team:</text>
     <text class="sub" x="420" y="248" text-anchor="middle">the pattern, demos, and a client</text>
     <text class="sub" x="420" y="264" text-anchor="middle">AI-security briefing, now a template</text>
-    ${box(598, 22, 'COPs, daily notes, tasks', 'kept current, every day')}
-    ${box(598, 96, 'Package impact analysis', 'every piece of metadata touched')}
-    ${box(598, 170, '96 ClickUp tasks', 'in about ten minutes, was half a day')}
-    ${box(598, 244, 'Ready-to-run form prompt', 'SharinPix, backed up first')}
+    ${dgOutputs.map((b, i) => box(598, 22 + 74 * i, b)).join('')}
     <line class="ln" x1="242" y1="44" x2="316" y2="80" marker-end="url(#ar)"/>
     <line class="ln" x1="242" y1="118" x2="316" y2="130" marker-end="url(#ar)"/>
     <line class="ln" x1="242" y1="192" x2="316" y2="180" marker-end="url(#ar)"/>
@@ -352,14 +420,14 @@ const diagram = `
     <line class="ln" x1="524" y1="130" x2="596" y2="118" marker-end="url(#ar)"/>
     <line class="ln" x1="524" y1="180" x2="596" y2="192" marker-end="url(#ar)"/>
     <line class="ln" x1="524" y1="230" x2="596" y2="266" marker-end="url(#ar)"/>
-    <text class="cap" x="420" y="322" text-anchor="middle">Source: 2026 self-evaluation. Client names left off on purpose.</text>
+    <text class="cap" x="420" y="322" text-anchor="middle">${esc(dgCaption)}</text>
   </svg>`;
 
 const aiSec = `
 <section id="ai-practice">
   <h2><span class="t">${esc(C.aiPractice.heading.t)}</span><span class="p">${esc(C.aiPractice.heading.p)}</span></h2>
   <p>${pair(C.aiPractice.intro)}</p>
-${diagram}
+${diagram}${diagramList}
   <ul class="practice">
 ${C.aiPractice.items.map(i => `    <li class="ai">${pair(i)}</li>`).join('\n')}
   </ul>
@@ -383,7 +451,13 @@ const gallerySec = !shown.length ? '' : `
   <h2><span class="t">Gallery: Built in Public</span><span class="p">See It Working</span></h2>
   <p class="srcline"><span class="t">Fresh builds in an Agentforce Developer Edition org. Code, run logs, and redacted output for each.</span><span class="p">Things Dean built from scratch in a practice Salesforce account, with the code and the results from a real run.</span></p>
   <div class="gallery">
-${shown.map(g => `    <article class="gcard"><h3>${pair(g.title)}</h3><p>${pair(g.what)}</p><p class="proof">${esc(g.proof)}</p><a class="open" href="${esc(g.href)}">Open</a></article>`).join('\n')}
+${shown.map(g => {
+  const text = `<h3>${pair(g.title)}</h3><p>${pair(g.what)}</p><p class="proof">${esc(g.proof)}</p><a class="open" href="${esc(g.href)}">Open</a>`;
+  if (!g.video) return `    <article class="gcard">${text}</article>`;
+  // A card with a demo spans the row: text on the left, the recording on the right (stacked on phones).
+  const v = g.video;
+  return `    <article class="gcard wide"><div class="gtext">${text}</div><figure><video controls muted playsinline preload="metadata" width="1268" height="1068" poster="${attr(v.poster)}" aria-describedby="${g.key}-cap"><source src="${attr(v.src)}" type="video/mp4"><a href="${attr(v.src)}">Download the demo (MP4)</a></video><figcaption id="${g.key}-cap">${esc(v.caption)}</figcaption></figure></article>`;
+}).join('\n')}
   </div>
 </section>
 `;
@@ -538,6 +612,36 @@ const footer = `
 </html>
 `;
 
+// ---------------------------------------------------------------- link-preview card and favicon
+// og-card.html is rendered to og-card.png (1200x630) with headless Chrome; see README.md. Same type, colors, and rule as the page.
+const tagParts = C.tagline.t.split('|').map(s => s.trim());
+const ogCard = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Link preview card</title>
+<style>
+html,body{margin:0}
+body{width:1200px;height:630px;overflow:hidden;background:#f3f4f6;font-family:Calibri,Carlito,"Segoe UI",Arial,sans-serif;color:#1f2328}
+.card{position:absolute;top:36px;right:56px;bottom:36px;left:56px;box-sizing:border-box;background:#fff;border-radius:14px;padding:52px 64px 48px;display:flex;flex-direction:column}
+.url{align-self:flex-start;padding:4px 14px;border-radius:999px;background:#fff7ee;border:1px solid #f0d2b3;color:#7a4a12;font-family:ui-monospace,Consolas,"Liberation Mono",monospace;font-size:22px}
+h1{font-size:92px;line-height:1;margin:30px 0 0;padding-bottom:20px;border-bottom:5px solid ${ACCENT}}
+.tag{margin:24px 0 0;font-size:38px;font-weight:700;color:${ACCENT_TEXT}}
+.tag2{margin:8px 0 0;font-size:32px;font-weight:700;color:#1f2328}
+.more{margin-top:auto;font-size:25px;color:#5b6670}
+</style>
+</head>
+<body><div class="card">
+<div class="url">${esc(C.site.label)}</div>
+<h1>${esc(C.name)}</h1>
+<div class="tag">${esc(tagParts[0])}</div>
+<div class="tag2">${tagParts.slice(1).map(esc).join(' &middot; ')}</div>
+<div class="more">Resume with a source for each claim &middot; PDF and Word copies &middot; Gallery of ${shown.length} AI builds</div>
+</div></body>
+</html>
+`;
+const favicon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="${ACCENT}"/><text x="32" y="42.5" text-anchor="middle" font-family="Calibri, Carlito, 'Segoe UI', Arial, sans-serif" font-size="29" font-weight="700" fill="#111">DF</text></svg>\n`;
+
 const html = head + header + '<main>' + summarySec + resultsSec + skillsSec + aiSec + proofSec + gallerySec + expSec + certSec + eduSec + builtSec + '</main>' + footer;
 
 fs.mkdirSync(outDir, { recursive: true });
@@ -545,6 +649,8 @@ fs.writeFileSync(path.join(outDir, 'Dean Finkelstein - Resume.html'), html, 'utf
 fs.writeFileSync(path.join(outDir, 'resume.json'), JSON.stringify(resumeJson, null, 2) + '\n', 'utf8');
 fs.writeFileSync(path.join(outDir, 'resume-plain.md'), mdPlain + '\n', 'utf8');
 fs.writeFileSync(path.join(outDir, 'resume-technical.md'), mdTech + '\n', 'utf8');
+fs.writeFileSync(path.join(outDir, 'og-card.html'), ogCard, 'utf8');
+fs.writeFileSync(path.join(outDir, 'favicon.svg'), favicon, 'utf8');
 // text dump of both registers for QA scans
 const dump = [];
 const walk = o => {
@@ -555,4 +661,4 @@ const walk = o => {
 };
 walk({ n: C.name, c: C.contact, a: C.availability, t: C.tagline, s: C.summary, h: C.highlights, k: C.skills, ai: C.aiPractice, gal: C.gallery, pr: C.proof, e: C.experience, ce: C.certifications, cn: C.certNote, ed: C.education, b: C.builtWith, d: C.disclosure });
 fs.writeFileSync(path.join(outDir, 'web-resume-text.txt'), dump.join('\n'), 'utf8');
-console.log('wrote Dean Finkelstein - Resume.html (' + html.length + ' chars), resume.json, two Markdown copies, and web-resume-text.txt to ' + outDir);
+console.log('wrote Dean Finkelstein - Resume.html (' + html.length + ' chars), resume.json, two Markdown copies, og-card.html, favicon.svg, and web-resume-text.txt to ' + outDir);

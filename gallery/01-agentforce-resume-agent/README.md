@@ -1,5 +1,11 @@
 # Agentforce resume agent
 
+[Dean Finkelstein's resume](https://deanfinkelstein.github.io/resume/) · [View the code on GitHub](https://github.com/DeanFinkelstein/resume/tree/main/gallery/01-agentforce-resume-agent)
+
+<video src="demo.mp4" poster="demo-poster.jpg" controls muted playsinline width="634"></video>
+
+[Watch the demo](demo.mp4) (75 seconds, silent, in the Agentforce Builder preview): the agent confirms a certification from the data in the org, declines to name clients, gives the availability line, and saves a test message for Dean as a Lead.
+
 **What it does.** An Agentforce service agent that answers questions about Dean from data in a Salesforce org, refuses what it cannot ground, never names a client, and takes a message for Dean as a Lead when the answer is not on his resume. It is the Salesforce-stack twin of the Claude-based assistant on the resume page.
 
 **Why it exists.** Dean's next step is leading client-facing Agentforce work. This is a complete agent built the way he would build one for a client: a data model, grounded actions with tests, an Agent Script definition in source control, guardrails written down, and a test plan written before the agent ran.
@@ -17,7 +23,8 @@
 | `specs/Resume_Agent-testSpec.yaml` | Sixteen-case test plan in the Salesforce CLI test spec format |
 | `scripts/converse.js` | Runs each test case as its own conversation through the Agent API and saves transcripts plus a summary of Salesforce's plan trace (raw traces stay local) |
 | `TEST-LOG.md` and `out/` | Four test runs: what failed, why, what changed, and the transcripts |
-| `DESIGN.md` | The design written before the build |
+| `demo.mp4` and `demo-poster.jpg` | The 75-second recording above, and its poster frame |
+| `DESIGN.md` | The design written before the build, with an "As built" section at the top that lists where the build differs and why |
 
 ## Build log (2026-10-17, Agentforce Developer Edition org)
 

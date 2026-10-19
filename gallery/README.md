@@ -1,5 +1,7 @@
 # Artifact gallery
 
+[Dean Finkelstein's resume](https://deanfinkelstein.github.io/resume/) · [View the code on GitHub](https://github.com/DeanFinkelstein/resume/tree/main/gallery)
+
 Fresh builds that show how Dean Finkelstein uses AI tooling in Salesforce work. Everything here was built from scratch in an Agentforce Developer Edition org and this folder. Nothing is copied from client work, and no client is named anywhere.
 
 Each artifact has the same shape: a README that says what it does, what goes in, what comes out, how long it took, and what Dean would change next time; the code or skill files; and proof from a real run. Every claim carries a source, the same rule as the resume.

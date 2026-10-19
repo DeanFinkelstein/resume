@@ -5,7 +5,7 @@
 //
 // Usage: node scripts/seed.js --org <alias> [--resume ../../resume.json] [--dry-run]
 'use strict';
-const { execSync } = require('child_process');
+const { execFileSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
@@ -108,17 +108,29 @@ const jobs = [
 ];
 console.error(`Built ${sec.length} sections, ${cred.length} credentials, ${eng.length} engagements from ${resumePath}`);
 if (DRY) { console.error('Dry run: CSVs written to data/, nothing sent to the org.'); process.exit(0); }
+// sf runs with an argument list, never through a shell, so no value is parsed as shell syntax. On Windows, sf is a
+// .cmd shim that Node will not start without a shell, so run the CLI's own entry script with node instead.
+function sfBin() {
+  if (process.platform !== 'win32') return ['sf'];
+  for (const dir of (process.env.PATH || '').split(path.delimiter).filter(Boolean)) {
+    const entry = [path.join(dir, 'node_modules', '@salesforce', 'cli', 'bin', 'run.js'), path.join(dir, '..', 'client', 'bin', 'run.js')]
+      .find(f => fs.existsSync(f));
+    if (entry) return [process.execPath, '--no-deprecation', entry];
+  }
+  return ['sf'];
+}
+const SF = sfBin();
+const sfRun = args => execFileSync(SF[0], [...SF.slice(1), ...args], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
 for (const j of jobs) {
-  const cmd = `sf data upsert bulk --sobject ${j.sobject} --file "${j.file}" --external-id ${j.ext} --line-ending LF --wait 10 --target-org ${ORG} --json`;
   let out = '';
-  try { out = execSync(cmd, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }); } catch (e) { out = (e.stdout || '').toString(); }
+  try { out = sfRun(['data', 'upsert', 'bulk', '--sobject', j.sobject, '--file', j.file, '--external-id', j.ext, '--line-ending', 'LF', '--wait', '10', '--target-org', ORG, '--json']); } catch (e) { out = (e.stdout || '').toString(); }
   let res;
   try { res = JSON.parse(out); } catch (e) { console.error(`${j.sobject}: could not parse sf output: ${out.slice(0, 200)}`); process.exitCode = 1; continue; }
   if (res.status !== 0) { console.error(`${j.sobject}: upsert failed (${(res.message || '').slice(0, 160)})`); process.exitCode = 1; continue; }
   // Verify by counting what is in the org, rather than trusting the job summary.
   let count = '?';
   try {
-    const q = JSON.parse(execSync(`sf data query --query "SELECT COUNT() FROM ${j.sobject}" --target-org ${ORG} --json`, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }));
+    const q = JSON.parse(sfRun(['data', 'query', '--query', `SELECT COUNT() FROM ${j.sobject}`, '--target-org', ORG, '--json']));
     count = q.result.totalSize;
   } catch (e) { /* leave as unknown */ }
   console.error(`${j.sobject}: upserted ${j.n} from resume.json; ${count} record(s) now in the org`);

@@ -1,0 +1,4 @@
+# GitHub Pages (Jekyll) settings. The resume page itself (index.html) is plain HTML and is served as is;
+# these settings name the site on the pages Jekyll renders from Markdown, such as the gallery READMEs.
+title: Dean Finkelstein
+description: Resume and AI tooling gallery of Dean Finkelstein, Salesforce Managed Services team lead.

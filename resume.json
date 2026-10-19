@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-14",
+  "generated": "2026-10-18",
   "name": "Dean Finkelstein",
   "contact": [
     "Matamoras, PA",
@@ -355,7 +355,12 @@
         "t": "Service agent in Agent Script with four grounded Apex actions, a read-only permission model, tests, and a 16-question test plan run against the live agent.",
         "p": "The same kind of assistant as the one on this page, built on Salesforce’s own AI agent product."
       },
-      "proof": "Published 2026-10-18: 14 of 16 test conversations pass"
+      "proof": "Published 2026-10-18: 14 of 16 test conversations pass",
+      "video": {
+        "src": "gallery/01-agentforce-resume-agent/demo.mp4",
+        "poster": "gallery/01-agentforce-resume-agent/demo-poster.jpg",
+        "caption": "Silent, 75 seconds, in the Agentforce Builder preview. The agent confirms a certification from the data in the org, declines to name clients, gives the availability line, and saves a test message for Dean as a Lead."
+      }
     },
     {
       "key": "ask",
@@ -385,7 +390,7 @@
         "t": "Read-only org audit (access, licenses, retired automation, API versions, coverage, Health Check, limits) shaped into prioritized tasks with acceptance criteria, reviewed, then created as GitHub issues.",
         "p": "Scans a Salesforce account for security gaps, wasted licenses, and old automation, then turns what it finds into a prioritized task list a team can work from."
       },
-      "proof": "Ran 2026-10-18: 37 findings, 7 GitHub issues"
+      "proof": "Ran 2026-10-17: 36 findings, 7 issues; 37 after MFA"
     },
     {
       "key": "refresh",

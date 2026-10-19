@@ -1,5 +1,7 @@
 # Adopting AI safely in a Salesforce shop
 
+[Dean Finkelstein's resume](https://deanfinkelstein.github.io/resume/) · [View the code on GitHub](https://github.com/DeanFinkelstein/resume/tree/main/gallery/04-adopting-ai-safely)
+
 **What it is.** A one-page briefing for an IT lead deciding whether and how to let a team use Claude alongside Salesforce. It answers three questions in order: who can log in, where the data goes, what it costs. Then it gives the seven-step rollout I would run.
 
 **Why it exists.** A client's IT team needed exactly this before they would approve a pilot: OAuth, data retention, and licensing, in one page, in words they could forward to their own leadership. The version they got became a reusable template at my firm. This is the public version, rebuilt from current sources with nothing client-specific in it.

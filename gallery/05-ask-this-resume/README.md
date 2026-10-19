@@ -1,5 +1,7 @@
 # Ask this resume
 
+[Dean Finkelstein's resume](https://deanfinkelstein.github.io/resume/) · [View the code on GitHub](https://github.com/DeanFinkelstein/resume/tree/main/gallery/05-ask-this-resume)
+
 **What it does.** A chat panel on the resume page that answers questions about Dean from the resume content only. If the answer is not on the page, it says so and points to email. It never names a client. Anyone can read the rules it runs under: the Worker serves them at `/prompt`, and they are in `worker/src/rules.txt`.
 
 **Why it exists.** Two reasons. A recruiter with one question should not have to read two pages to find the answer. And a grounded assistant with visible rules, a spend cap, and an honest refusal is a better demonstration of how Dean builds AI tooling than any bullet point.

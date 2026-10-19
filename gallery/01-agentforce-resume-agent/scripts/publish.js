@@ -5,7 +5,7 @@
 //
 // Usage: node scripts/publish.js --org <alias> --agent-user <username> [--validate-only] [--no-activate]
 'use strict';
-const { execSync } = require('child_process');
+const { execFileSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
@@ -21,10 +21,22 @@ const file = path.join(root, 'force-app', 'main', 'default', 'aiAuthoringBundles
 const original = fs.readFileSync(file, 'utf8');
 if (!original.includes(PLACEHOLDER)) { console.error(`Placeholder ${PLACEHOLDER} not found in ${file}. Refusing to publish.`); process.exit(1); }
 
-function run(label, cmd) {
+// sf runs with an argument list, never through a shell, so no value is parsed as shell syntax. On Windows, sf is a
+// .cmd shim that Node will not start without a shell, so run the CLI's own entry script with node instead.
+function sfBin() {
+  if (process.platform !== 'win32') return ['sf'];
+  for (const dir of (process.env.PATH || '').split(path.delimiter).filter(Boolean)) {
+    const entry = [path.join(dir, 'node_modules', '@salesforce', 'cli', 'bin', 'run.js'), path.join(dir, '..', 'client', 'bin', 'run.js')]
+      .find(f => fs.existsSync(f));
+    if (entry) return [process.execPath, '--no-deprecation', entry];
+  }
+  return ['sf'];
+}
+const SF = sfBin();
+function run(label, args) {
   process.stderr.write(`${label} ... `);
   let out = '';
-  try { out = execSync(cmd, { cwd: root, encoding: 'utf8', maxBuffer: 32 * 1024 * 1024, stdio: ['ignore', 'pipe', 'pipe'] }); }
+  try { out = execFileSync(SF[0], [...SF.slice(1), ...args], { cwd: root, encoding: 'utf8', maxBuffer: 32 * 1024 * 1024, stdio: ['ignore', 'pipe', 'pipe'] }); }
   catch (e) { out = (e.stdout || '').toString() || (e.stderr || '').toString(); }
   const i = out.indexOf('{');
   let j = {};
@@ -36,13 +48,13 @@ function run(label, cmd) {
 let exitCode = 0;
 try {
   fs.writeFileSync(file, original.split(PLACEHOLDER).join(USER), 'utf8');
-  const v = run('Validating Agent Script', `sf agent validate authoring-bundle --api-name ${API} --target-org ${ORG} --json`);
+  const v = run('Validating Agent Script', ['agent', 'validate', 'authoring-bundle', '--api-name', API, '--target-org', ORG, '--json']);
   if (v.status !== 0) { exitCode = 1; }
   else if (!args.includes('--validate-only')) {
-    const p = run('Publishing', `sf agent publish authoring-bundle --api-name ${API} --target-org ${ORG} --json`);
+    const p = run('Publishing', ['agent', 'publish', 'authoring-bundle', '--api-name', API, '--target-org', ORG, '--json']);
     if (p.status !== 0) exitCode = 1;
     else if (!args.includes('--no-activate')) {
-      const a = run('Activating', `sf agent activate --api-name ${API} --target-org ${ORG} --json`);
+      const a = run('Activating', ['agent', 'activate', '--api-name', API, '--target-org', ORG, '--json']);
       if (a.status !== 0) exitCode = 1;
     }
   }

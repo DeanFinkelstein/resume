@@ -1,5 +1,7 @@
 # Org audit to tasks
 
+[Dean Finkelstein's resume](https://deanfinkelstein.github.io/resume/) · [View the code on GitHub](https://github.com/DeanFinkelstein/resume/tree/main/gallery/02-org-audit-to-tasks)
+
 **What it does.** Audits a Salesforce org read-only (broad data access, license waste, retired automation, stale API versions, test coverage, inactive validation rules, undocumented fields, unused reports, Security Health Check risks, limits near the ceiling), writes the findings as a document and as structured data, shapes them into a prioritized task list with checklists and acceptance criteria, and, after the person approves the list, creates the tasks as GitHub issues (or in ClickUp through MCP).
 
 **Why it exists.** On a client engagement, a 244-line audit became 96 structured ClickUp tasks in about ten minutes through Claude Code and MCP. By hand it had taken half a day. This is that workflow rebuilt from scratch so it can be shown in public: a dev org, a fresh audit script, and the same pattern of letting the agent ask its questions before it acts.

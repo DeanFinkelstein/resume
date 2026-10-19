@@ -229,6 +229,11 @@ const gallery = [
       p: 'The same kind of assistant as the one on this page, built on Salesforce’s own AI agent product.',
     },
     proof: 'Published 2026-10-18: 14 of 16 test conversations pass',
+    video: {
+      src: 'gallery/01-agentforce-resume-agent/demo.mp4',
+      poster: 'gallery/01-agentforce-resume-agent/demo-poster.jpg',
+      caption: 'Silent, 75 seconds, in the Agentforce Builder preview. The agent confirms a certification from the data in the org, declines to name clients, gives the availability line, and saves a test message for Dean as a Lead.',
+    },
   },
   {
     key: 'ask', ready: true, ai: true, href: 'gallery/05-ask-this-resume/',
@@ -246,7 +251,7 @@ const gallery = [
       t: 'Read-only org audit (access, licenses, retired automation, API versions, coverage, Health Check, limits) shaped into prioritized tasks with acceptance criteria, reviewed, then created as GitHub issues.',
       p: 'Scans a Salesforce account for security gaps, wasted licenses, and old automation, then turns what it finds into a prioritized task list a team can work from.',
     },
-    proof: 'Ran 2026-10-18: 37 findings, 7 GitHub issues',
+    proof: 'Ran 2026-10-17: 36 findings, 7 issues; 37 after MFA',
   },
   {
     key: 'refresh', ready: true, ai: true, href: 'gallery/03-pre-refresh-risk-scan/',
@@ -268,8 +273,14 @@ const gallery = [
   },
 ];
 
-// Print and PDF only: the page URL goes on the contact line, and these three lines point a forwarded copy back to the proof.
-const site = { href: 'https://deanfinkelstein.github.io/resume/', label: 'deanfinkelstein.github.io/resume' };
+// The page's own address. In print it goes on the contact line, and the proof lines below point a forwarded copy back to the work.
+// description is the search and link-preview text; card is the preview image, made by the build from og-card.html.
+const site = {
+  href: 'https://deanfinkelstein.github.io/resume/',
+  label: 'deanfinkelstein.github.io/resume',
+  description: 'Salesforce Managed Services team lead, 8x Salesforce Certified, who builds AI and agentic tooling. Resume with a source for each claim, PDF and Word copies, and an Agentforce agent you can watch.',
+  card: { file: 'og-card.png', alt: 'Dean Finkelstein: Salesforce Managed Services Team Lead, 8x Salesforce Certified, builds AI and agentic tooling.' },
+};
 const proof = {
   heading: 'Proof',
   items: [

@@ -1,5 +1,7 @@
 # Pre-refresh risk scan
 
+[Dean Finkelstein's resume](https://deanfinkelstein.github.io/resume/) · [View the code on GitHub](https://github.com/DeanFinkelstein/resume/tree/main/gallery/03-pre-refresh-risk-scan)
+
 **What it does.** Before a sandbox refresh, it lists everything in the org that the refresh will wipe, reset, or break: scheduled jobs, connected apps and the OAuth tokens behind them, named and external credentials, auth providers and SSO, remote sites, certificates, sites, custom setting data, custom metadata, integration-looking users, recent setup changes not yet in source control, platform event subscribers, email services, custom object record counts, and (if you point it at a project) the metadata in the org that differs from source control. It writes a checklist with an owner column and the manual checks the API cannot see, and the skill around it asks its questions first and drafts the client note last.
 
 **Why it exists.** A client once planned a Full sandbox refresh with a third-party team's work sitting only in that sandbox. The list of what would be lost, including items outside our scope, was built by hand and the client acted on it. This is that list as a tool, so it takes minutes instead of an afternoon and nothing depends on remembering.

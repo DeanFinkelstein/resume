@@ -11,7 +11,7 @@
 // Output: <out>/refresh-risk-checklist.md and <out>/refresh-risk.json
 'use strict';
 
-const { execSync } = require('child_process');
+const { execFileSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
@@ -35,12 +35,23 @@ const OUT = path.resolve(opts.out || path.join(process.cwd(), 'out'));
 fs.mkdirSync(OUT, { recursive: true });
 
 // ---------------------------------------------------------------- sf CLI wrapper
-function sf(cmdline, cwd) {
-  // Runs "sf <cmdline> --json" and returns result. Throws a short Error on failure.
-  const full = `sf ${cmdline} --json`;
+// sf runs with an argument list, never through a shell, so no value is parsed as shell syntax. On Windows, sf is a
+// .cmd shim that Node will not start without a shell, so run the CLI's own entry script with node instead.
+function sfBin() {
+  if (process.platform !== 'win32') return ['sf'];
+  for (const dir of (process.env.PATH || '').split(path.delimiter).filter(Boolean)) {
+    const entry = [path.join(dir, 'node_modules', '@salesforce', 'cli', 'bin', 'run.js'), path.join(dir, '..', 'client', 'bin', 'run.js')]
+      .find(f => fs.existsSync(f));
+    if (entry) return [process.execPath, '--no-deprecation', entry];
+  }
+  return ['sf'];
+}
+const SF = sfBin();
+function sf(args, cwd) {
+  // Runs "sf <args> --json" and returns result. Throws a short Error on failure.
   let out = '';
   try {
-    out = execSync(full, { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, cwd, stdio: ['ignore', 'pipe', 'pipe'] });
+    out = execFileSync(SF[0], [...SF.slice(1), ...args, '--json'], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, cwd, stdio: ['ignore', 'pipe', 'pipe'] });
   } catch (e) {
     out = (e.stdout || '').toString();
     if (!out.trim()) throw new Error(((e.stderr || e.message || '') + '').trim().split('\n')[0] || 'sf failed');
@@ -50,15 +61,13 @@ function sf(cmdline, cwd) {
   if (j.status !== 0) throw new Error((j.message || j.name || 'sf error').split('\n')[0]);
   return j.result;
 }
-// SOQL must avoid double quotes and percent signs (the command runs through the shell).
 function query(soql, tooling) {
-  if (/["%]/.test(soql)) throw new Error('internal: SOQL must not contain " or %');
-  const r = sf(`data query --query "${soql}" --target-org ${ORG}${tooling ? ' --use-tooling-api' : ''}`);
+  const r = sf(['data', 'query', '--query', soql, '--target-org', ORG, ...(tooling ? ['--use-tooling-api'] : [])]);
   return { records: r.records || [], totalSize: r.totalSize != null ? r.totalSize : (r.records || []).length };
 }
 function rows(soql, tooling) { return query(soql, tooling).records; }
 function listMeta(type) {
-  const r = sf(`org list metadata --metadata-type ${type} --target-org ${ORG}`);
+  const r = sf(['org', 'list', 'metadata', '--metadata-type', type, '--target-org', ORG]);
   const arr = Array.isArray(r) ? r : (r && r.length === undefined && r.fullName ? [r] : []);
   return arr.map(m => ({ name: m.fullName, modified: (m.lastModifiedDate || '').slice(0, 10), by: m.lastModifiedByName || '' }));
 }
@@ -195,7 +204,7 @@ if (opts.project) {
     why: 'Anything in the org that is not in the repo is lost on refresh. This is the retrieve preview against the project you pointed at.',
     action: 'Retrieve and commit before the refresh, or accept the loss on purpose.',
     run: () => {
-      const r = sf(`project retrieve preview --target-org ${ORG}`, path.resolve(opts.project));
+      const r = sf(['project', 'retrieve', 'preview', '--target-org', ORG], path.resolve(opts.project));
       const items = [];
       for (const c of (r.toRetrieve || [])) items.push({ type: c.type, name: c.fullName, state: c.state || 'changed in org' });
       for (const c of (r.conflicts || [])) items.push({ type: c.type, name: c.fullName, state: 'conflict' });

@@ -12,7 +12,7 @@
 // Output: <out>/findings.md (human) and <out>/findings.json (structured, input to the task skill)
 'use strict';
 
-const { execSync } = require('child_process');
+const { execFileSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
@@ -35,10 +35,22 @@ const MIN_API = Number(opts['min-api'] || 55);
 const OUT = path.resolve(opts.out || path.join(process.cwd(), 'out'));
 fs.mkdirSync(OUT, { recursive: true });
 
-function sf(cmdline) {
+// sf runs with an argument list, never through a shell, so no value is parsed as shell syntax. On Windows, sf is a
+// .cmd shim that Node will not start without a shell, so run the CLI's own entry script with node instead.
+function sfBin() {
+  if (process.platform !== 'win32') return ['sf'];
+  for (const dir of (process.env.PATH || '').split(path.delimiter).filter(Boolean)) {
+    const entry = [path.join(dir, 'node_modules', '@salesforce', 'cli', 'bin', 'run.js'), path.join(dir, '..', 'client', 'bin', 'run.js')]
+      .find(f => fs.existsSync(f));
+    if (entry) return [process.execPath, '--no-deprecation', entry];
+  }
+  return ['sf'];
+}
+const SF = sfBin();
+function sf(args) {
   let out = '';
   try {
-    out = execSync(`sf ${cmdline} --json`, { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, stdio: ['ignore', 'pipe', 'pipe'] });
+    out = execFileSync(SF[0], [...SF.slice(1), ...args, '--json'], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, stdio: ['ignore', 'pipe', 'pipe'] });
   } catch (e) {
     out = (e.stdout || '').toString();
     if (!out.trim()) throw new Error(((e.stderr || e.message || '') + '').trim().split('\n')[0] || 'sf failed');
@@ -48,8 +60,7 @@ function sf(cmdline) {
   return j.result;
 }
 function rows(soql, tooling) {
-  if (/["%]/.test(soql)) throw new Error('internal: SOQL must not contain " or %');
-  const r = sf(`data query --query "${soql}" --target-org ${ORG}${tooling ? ' --use-tooling-api' : ''}`);
+  const r = sf(['data', 'query', '--query', soql, '--target-org', ORG, ...(tooling ? ['--use-tooling-api'] : [])]);
   return r.records || [];
 }
 const pick = (r, k) => k.split('.').reduce((o, p) => (o == null ? o : o[p]), r);
@@ -224,7 +235,7 @@ const checks = [
   {
     name: 'Org limits above 80 percent',
     run: () => {
-      const r = sf(`limits api display --target-org ${ORG}`);
+      const r = sf(['limits', 'api', 'display', '--target-org', ORG]);
       let n = 0;
       for (const l of r || []) {
         if (!l.max || l.max <= 0) continue;
