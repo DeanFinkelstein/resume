@@ -317,13 +317,13 @@
   "builtWith": {
     "heading": "How This Page Was Built",
     "body": {
-      "t": "One content file holds every line of this resume in two registers with a source for each claim. Three builds read it: this page, a Word copy for applicant tracking systems, and the two PDFs printed from this page. A scan script blocks em-dashes, a list of filler phrases, and any client name before anything ships. Built in Claude Code sessions under those rules, the same way I run client work: write the rules down, let the tooling enforce them, keep one source of truth.",
-      "p": "Everything on this page comes from one file that holds each line twice, once in plain words and once in Salesforce terms, with a note on where each claim comes from. Three things are built from that file: this page, a Word copy for job-application systems, and the two PDFs. A checking script stops any em-dash, filler phrase, or client name from getting through. Built with Claude Code, the same way I run client work: write the rules down, let the tools enforce them, keep one source of truth."
+      "t": "One content file holds every line of this resume in two registers with a source for each claim. Three builds read it: this page, a Word copy for applicant tracking systems, and the two PDFs printed from this page. Before anything is published, I run a scan script on it that flags em-dashes, a list of filler phrases, and any client name. Built in Claude Code sessions under those rules, the same way I run client work: write the rules down, let the tooling enforce them, keep one source of truth.",
+      "p": "Everything on this page comes from one file that holds each line twice, once in plain words and once in Salesforce terms, with a note on where each claim comes from. Three things are built from that file: this page, a Word copy for job-application systems, and the two PDFs. Before anything is published, I run a checking script on it that catches any em-dash, filler phrase, or client name. Built with Claude Code, the same way I run client work: write the rules down, let the tools enforce them, keep one source of truth."
     },
     "pipeline": [
       "content.js  →  build-web-resume.js  →  this page  →  PDF (Plain English) and PDF (Technical)",
       "content.js  →  build-resume.js  →  Word copy for applicant tracking systems",
-      "qa.py  →  scans every output: em-dashes, filler phrases, client names",
+      "qa.py  →  run on every output before it is published: em-dashes, filler phrases, client names",
       "resume.json  →  the same content for machines, beside this page"
     ],
     "links": [
