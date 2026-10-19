@@ -37,6 +37,13 @@ const highlights = [
     src: 'Leadership email, Mar 2026; client announcement, Aug 2026' },
 ];
 
+// Three numbers shown as tiles above Selected Results, on screen only. Each one restates a sourced line in highlights.
+const metrics = [
+  { n: '80%', t: 'renewal rate in H1 2026 (8 of 10 due)', p: 'of contracts due in the first half of 2026 renewed (8 of 10)' },
+  { n: '13', t: 'clients in his managed-services book, the most on the team', p: 'companies on retainer, the most on the team' },
+  { n: '10 min', t: '244-line audit to 96 ClickUp tasks with Claude Code (was half a day)', p: 'to turn a 244-line audit into 96 tasks with AI (was half a day)', ai: true },
+];
+
 const skills = [
   { label: { t: 'Administration and development', p: 'Running Salesforce' },
     t: 'Flow, validation rules and formulas, users, profiles, roles, permission sets and sharing, Data Loader, sandbox strategy, change sets, Production deployments; Apex, SOQL, Lightning Web Components (LWC), SFDX, Git',
@@ -100,6 +107,7 @@ const experience = [
   },
   {
     company: 'Final Mentor, LLC.',
+    collapsed: true, // web page only: details start folded, the PDFs and Word copy show everything
     note: { t: 'Fort Lauderdale, FL', p: 'Fort Lauderdale, FL' },
     dates: 'Jun 2019 to Jun 2021',
     roles: 'Customer Engagement Manager & CRM Administrator',
@@ -115,6 +123,7 @@ const experience = [
   },
   {
     company: 'Innovative Health Group, LLC.',
+    collapsed: true, // web page only: details start folded, the PDFs and Word copy show everything
     note: { t: 'Fort Lauderdale, FL', p: 'Fort Lauderdale, FL' },
     dates: 'Mar 2017 to Jun 2019',
     roles: 'Sales Manager / Salesforce Admin',
@@ -130,6 +139,7 @@ const experience = [
   },
   {
     company: 'Maggiano’s Little Italy',
+    collapsed: true, // web page only: details start folded, the PDFs and Word copy show everything
     note: { t: 'Hackensack, NJ', p: 'Hackensack, NJ' },
     dates: 'Mar 2014 to Jun 2017',
     roles: 'Regional Sales and Supply Chain Coordinator',
@@ -319,4 +329,4 @@ const T = {
   quotes: [],
 };
 
-module.exports = { name, contact, availability, tagline, summary, highlights, skills, experience, certifications, certNote, education, aiPractice, builtWith, disclosure, ask, gallery, site, proof, T };
+module.exports = { name, contact, availability, tagline, summary, highlights, metrics, skills, experience, certifications, certNote, education, aiPractice, builtWith, disclosure, ask, gallery, site, proof, T };
