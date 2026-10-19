@@ -18,7 +18,7 @@ Each artifact has the same shape: a README that says what it does, what goes in,
 
 - No client names, client contacts, or client data. Functional descriptors only, the same rule as the resume.
 - Dev org only. Nothing runs against a client or employer org.
-- No em-dashes, none of the filler phrases on the resume's avoid-list. `../build/qa.py` scans every file before it ships.
+- No em-dashes, none of the filler phrases on the resume's avoid-list. `../build/qa.py` is run on every file before it is published.
 - Every number has a source. Every quote is verbatim.
 - Secrets never enter this folder. API keys live in Worker secrets or local, git-ignored files. Published scan output is redacted.
 

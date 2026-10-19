@@ -187,13 +187,13 @@ const aiPractice = {
 const builtWith = {
   heading: 'How This Page Was Built',
   body: {
-    t: 'One content file holds every line of this resume in two registers with a source for each claim. Three builds read it: this page, a Word copy for applicant tracking systems, and the two PDFs printed from this page. A scan script blocks em-dashes, a list of filler phrases, and any client name before anything ships. Built in Claude Code sessions under those rules, the same way I run client work: write the rules down, let the tooling enforce them, keep one source of truth.',
-    p: 'Everything on this page comes from one file that holds each line twice, once in plain words and once in Salesforce terms, with a note on where each claim comes from. Three things are built from that file: this page, a Word copy for job-application systems, and the two PDFs. A checking script stops any em-dash, filler phrase, or client name from getting through. Built with Claude Code, the same way I run client work: write the rules down, let the tools enforce them, keep one source of truth.',
+    t: 'One content file holds every line of this resume in two registers with a source for each claim. Three builds read it: this page, a Word copy for applicant tracking systems, and the two PDFs printed from this page. Before anything is published, I run a scan script on it that flags em-dashes, a list of filler phrases, and any client name. Built in Claude Code sessions under those rules, the same way I run client work: write the rules down, let the tooling enforce them, keep one source of truth.',
+    p: 'Everything on this page comes from one file that holds each line twice, once in plain words and once in Salesforce terms, with a note on where each claim comes from. Three things are built from that file: this page, a Word copy for job-application systems, and the two PDFs. Before anything is published, I run a checking script on it that catches any em-dash, filler phrase, or client name. Built with Claude Code, the same way I run client work: write the rules down, let the tools enforce them, keep one source of truth.',
   },
   pipeline: [
     'content.js  →  build-web-resume.js  →  this page  →  PDF (Plain English) and PDF (Technical)',
     'content.js  →  build-resume.js  →  Word copy for applicant tracking systems',
-    'qa.py  →  scans every output: em-dashes, filler phrases, client names',
+    'qa.py  →  run on every output before it is published: em-dashes, filler phrases, client names',
     'resume.json  →  the same content for machines, beside this page',
   ],
   links: [
@@ -212,8 +212,8 @@ const ask = {
   endpoint: 'https://ask-this-resume.finkelstein-dean.workers.dev',
   label: 'Ask this resume',
   intro: {
-    t: 'Answers come only from this page. If it is not on the page, the assistant says so and points you to email. Runs on Claude behind a Cloudflare Worker Dean built, with a per-visitor limit and a daily cap. Questions are not stored.',
-    p: 'Ask anything about Dean. The answers come only from this page. If something is not on the page, it says so and gives you his email. It runs on Claude behind a small service Dean built, with a limit per visitor and per day. Your questions are not saved.',
+    t: 'Answers come only from this page. If it is not on the page, the assistant says so and points you to email. Runs on Claude behind a Cloudflare Worker Dean built, with a per-visitor limit and a daily cap. Dean does not log your questions. They are sent to Anthropic’s API, which deletes them within 30 days under its standard policy.',
+    p: 'Ask anything about Dean. The answers come only from this page. If something is not on the page, it says so and gives you his email. It runs on Claude behind a small service Dean built, with a limit per visitor and per day. Dean does not keep a log of your questions. They go to Anthropic, the company that makes Claude, which deletes them within 30 days under its standard policy.',
   },
   offline: 'The assistant is not switched on yet. Email Dean at finkelstein.dean@gmail.com and he will answer in person.',
   starters: ['What has he done with Field Service?', 'Is he certified in Data Cloud?', 'What AI tools has he built?', 'Is he open to full-time work?'],
@@ -268,9 +268,29 @@ const gallery = [
   },
 ];
 
+// Print and PDF only: the page URL goes on the contact line, and these three lines point a forwarded copy back to the proof.
+const site = { href: 'https://deanfinkelstein.github.io/resume/', label: 'deanfinkelstein.github.io/resume' };
+const proof = {
+  heading: 'Proof',
+  items: [
+    { label: { t: 'Agentforce agent', p: 'Agentforce assistant' },
+      t: 'Agent Script, Apex actions, 16-question test plan.',
+      p: 'an assistant about Dean, built in Salesforce.',
+      href: site.href + 'gallery/01-agentforce-resume-agent/' },
+    { label: { t: 'Ask this resume', p: 'Ask this resume' },
+      t: 'Claude chat grounded in this resume, on the live page.',
+      p: 'a chat on the web page that answers only from this resume.',
+      href: site.href + '#ask' },
+    { label: { t: 'AI safety briefing', p: 'AI safety guide' },
+      t: 'OAuth, data retention, and licensing.',
+      p: 'one page for IT on adopting AI safely.',
+      href: site.href + 'gallery/04-adopting-ai-safely/BRIEFING.pdf' },
+  ],
+};
+
 // Technical-only view used by the Word builder (same facts, one register, no source notes)
 const T = {
-  name, contact, availability,
+  name, contact: [...contact, site.label], availability,
   tagline: tagline.t,
   summary: summary.t,
   highlights: highlights.map(h => h.t),
@@ -282,4 +302,4 @@ const T = {
   quotes: [],
 };
 
-module.exports = { name, contact, availability, tagline, summary, highlights, skills, experience, certifications, certNote, education, aiPractice, builtWith, disclosure, ask, gallery, T };
+module.exports = { name, contact, availability, tagline, summary, highlights, skills, experience, certifications, certNote, education, aiPractice, builtWith, disclosure, ask, gallery, site, proof, T };

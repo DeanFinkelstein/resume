@@ -50,7 +50,7 @@ Then put the Worker URL into `build/content.js` under `ask.endpoint`, add the pa
 | Prompt injection ("ignore your rules") | Rule 6 declines and continues; the resume is the only grounding; no tools, no browsing |
 | Client names leak | None exist in the grounding. Rule 2 refuses to confirm or deny names the visitor supplies |
 | Visitor privacy | Questions and answers are not logged; the visitor id is a salted hash kept for one hour |
-| Another site embeds the endpoint | Origin allowlist; everything else gets 403 |
+| Another site embeds the endpoint | Origin allowlist: a browser on another site's page gets 403. It stops other sites' pages, not scripts, because a script can send any Origin header it likes. Scripts still hit the per-visitor and daily caps |
 | Key exposure | Worker secret only; for local runs the key goes in `worker/.dev.vars`, which is git-ignored |
 
 ## Local test log (2026-10-17, `wrangler dev`, deliberately invalid API key, per-visitor limit set to 3)
@@ -67,8 +67,6 @@ Then put the Worker URL into `build/content.js` under `ask.endpoint`, add the pa
 | POST /ask with an invalid API key, three times | 500 with the email fallback message, logged without the question | 500, three times |
 | POST /ask a fourth time | 429 with the polite limit message | 429 |
 | GET an unknown path | 404 | 404 |
-
-Not yet tested: a real answer from the model. That needs the real key as a Worker secret.
 
 **Time.** One session to write; one evening to deploy and test.
 

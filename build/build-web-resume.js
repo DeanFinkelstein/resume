@@ -12,7 +12,8 @@ const pair = o => `<span class="t">${esc(o.t)}</span><span class="p">${esc(o.p)}
 const src = s => s ? `<span class="src">${esc(s)}</span>` : '';
 const aiCls = o => (o && o.ai) ? ' class="ai"' : '';
 
-const ACCENT = '#e69138';
+const ACCENT = '#e69138';      // rules, fills, markers
+const ACCENT_TEXT = '#9a5a12'; // accent-colored text: 5.46:1 on white, where ACCENT is 2.48:1
 const today = '2026-10-14';
 
 // ---------------------------------------------------------------- markdown (for the copy button)
@@ -87,7 +88,7 @@ const head = `<!DOCTYPE html>
 <title>Dean Finkelstein - Resume</title>
 <script type="application/ld+json">${jsonSafe(jsonLd)}</script>
 <style>
-:root{--ink:#1f2328;--muted:#5b6670;--rule:#d9dee3;--accent:${ACCENT};--soft:#fff7ee;--soft2:#f0d2b3;
+:root{--ink:#1f2328;--muted:#5b6670;--rule:#d9dee3;--accent:${ACCENT};--accent-text:${ACCENT_TEXT};--soft:#fff7ee;--soft2:#f0d2b3;
   --sans:Calibri,Carlito,"Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif;
   --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono","Courier New",monospace}
 *{box-sizing:border-box}
@@ -100,7 +101,7 @@ body.tech .p{display:none}
 
 .top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px 28px;flex-wrap:wrap;padding-bottom:12px;border-bottom:2px solid var(--accent);margin-bottom:6px}
 h1{font-size:34px;line-height:1.1;margin:0 0 4px}
-.tag{margin:0 0 6px;color:var(--accent);font-weight:700;font-size:17px}
+.tag{margin:0 0 6px;color:var(--accent-text);font-weight:700;font-size:17px}
 .contact{margin:0 0 4px;color:var(--muted)}
 .avail{margin:0;font-weight:700}
 .controls{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex:0 0 auto}
@@ -115,7 +116,7 @@ h1{font-size:34px;line-height:1.1;margin:0 0 4px}
 .btn:hover{border-color:var(--accent)}
 .btn[aria-pressed="true"]{background:var(--soft);border-color:var(--accent);font-weight:700}
 .hint{font-size:12.5px;color:var(--muted);text-align:right;max-width:320px}
-.print-note{display:none}
+.print-note,.print-url,#proof{display:none}
 
 section{margin:0 0 20px}
 h2{font-size:14px;letter-spacing:1.2px;text-transform:uppercase;margin:22px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--accent)}
@@ -221,8 +222,13 @@ footer p{margin:0 0 4px}
 @media print{
   @page{size:Letter;margin:0.55in}
   html,body{background:#fff;max-width:none;padding:0;margin:0;font-size:9.1pt;line-height:1.18;color:#000}
-  .controls,.ask-launch,.ask-panel{display:none !important}
+  .controls,.ask-launch,.ask-panel,.screen-only{display:none !important}
   .print-note{display:block;margin:0;font-size:8pt;color:#444}
+  .print-url{display:inline}
+  #proof{display:block}
+  .proof{list-style:none;padding:0;margin:0}
+  .proof li{margin:0 0 1pt}
+  .proof a{white-space:nowrap}
   .top{padding-bottom:4pt;margin-bottom:2pt;border-bottom:1.5pt solid var(--accent)}
   h1{font-size:21pt;margin:0 0 1pt}
   .tag{font-size:10.5pt;margin:0 0 2pt}
@@ -232,10 +238,9 @@ footer p{margin:0 0 4px}
   p{margin:0 0 2pt}
   ul,ol{margin:0 0 2pt;padding-left:16pt}
   li{margin:0 0 1.5pt;break-inside:avoid}
-  .src{font-size:7pt;padding:0 4pt;border-radius:3pt;background:#fff;border:0.5pt solid #c9a27a;color:#333;line-height:1.3;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .srcline{font-size:8pt}
-  .results li{padding:2pt 0;gap:2pt 12pt;border-bottom:0.5pt solid #ddd}
-  .results .src{max-width:170pt}
+  /* Source tags stay on the web page: in a PDF's text layer they splice into the sentences beside them. */
+  .src,.srcline{display:none}
+  .results li{display:block;padding:2pt 0;border-bottom:0.5pt solid #ddd}
   .job{margin:4.5pt 0 0.5pt;break-after:avoid}
   .job .co{font-size:10.5pt}
   .roles{margin:0 0 2pt;break-after:avoid}
@@ -264,9 +269,9 @@ const header = `
     <div>
       <h1>${esc(C.name)}</h1>
       <p class="tag">${pair(C.tagline)}</p>
-      <p class="contact">${esc(C.contact[0])} · <a href="mailto:${esc(C.contact[1])}">${esc(C.contact[1])}</a> · <a href="https://www.linkedin.com/in/deanfinkelstein/">${esc(C.contact[2])}</a></p>
+      <p class="contact">${esc(C.contact[0])} · <a href="mailto:${esc(C.contact[1])}">${esc(C.contact[1])}</a> · <a href="https://www.linkedin.com/in/deanfinkelstein/">${esc(C.contact[2])}</a><span class="print-url"> · <a href="${esc(C.site.href)}">${esc(C.site.label)}</a></span></p>
       <p class="avail">${esc(C.availability)}</p>
-      <p class="print-note"><span class="p">Plain English version. The same resume in Technical form prints from the web page with the switch set to Technical.</span><span class="t">Technical version. The same resume in Plain English prints from the web page with the switch set to Plain English.</span></p>
+      <p class="print-note"><span class="p">Plain English version. The Technical version and the source for each claim are on the web page.</span><span class="t">Technical version. The Plain English version and the source for each claim are on the web page.</span></p>
     </div>
     <div class="controls">
       <div class="toggle" role="group" aria-label="Reading version">
@@ -362,6 +367,16 @@ ${C.aiPractice.items.map(i => `    <li class="ai">${pair(i)}</li>`).join('\n')}
 </section>
 `;
 
+// Print only: three links a forwarded PDF can follow back to the work.
+const proofSec = `
+<section id="proof">
+  <h2>${esc(C.proof.heading)}</h2>
+  <ul class="proof">
+${C.proof.items.map(i => `    <li><b>${pair(i.label)}:</b> ${pair(i)} <a href="${esc(i.href)}">${esc(i.href.replace(/^https:\/\//, '').replace(/\/$/, ''))}</a></li>`).join('\n')}
+  </ul>
+</section>
+`;
+
 const shown = C.gallery.filter(g => g.ready);
 const gallerySec = !shown.length ? '' : `
 <section id="gallery">
@@ -420,7 +435,7 @@ ${C.builtWith.links.map(l => `    <li><a href="${esc(l.href)}">${esc(l.label)}</
 const footer = `
 <footer>
   <p class="disclosure">${pair(C.disclosure)}</p>
-  <p><span class="p">How to read this page: every line is written twice, once in plain words and once for Salesforce people. The switch at the top flips between them. The small tags show where each claim comes from.</span><span class="t">How to read this page: every line is written twice, once for Salesforce people and once in plain words. The switch at the top flips between them. The small tags show the source of each claim.</span></p>
+  <p class="screen-only"><span class="p">How to read this page: every line is written twice, once in plain words and once for Salesforce people. The switch at the top flips between them. The small tags show where each claim comes from.</span><span class="t">How to read this page: every line is written twice, once for Salesforce people and once in plain words. The switch at the top flips between them. The small tags show the source of each claim.</span></p>
 <p>Client names are left off on purpose. References are available with the client’s consent. Last updated ${today}.</p>
 </footer>
 <button type="button" class="ask-launch" id="ask-launch" aria-expanded="false" aria-controls="ask-panel">${esc(C.ask.label)}</button>
@@ -467,6 +482,7 @@ const footer = `
       .catch(function(){thinking.textContent='Could not reach the assistant. Email Dean at finkelstein.dean@gmail.com.';})
       .then(function(){busy=false;send.disabled=false;input.focus();});
   });
+  if(location.hash==='#ask'){open(true);}
 })();
 </script>
 <script type="application/json" id="md-plain">${jsonSafe(mdPlain)}</script>
@@ -522,7 +538,7 @@ const footer = `
 </html>
 `;
 
-const html = head + header + '<main>' + summarySec + resultsSec + skillsSec + aiSec + gallerySec + expSec + certSec + eduSec + builtSec + '</main>' + footer;
+const html = head + header + '<main>' + summarySec + resultsSec + skillsSec + aiSec + proofSec + gallerySec + expSec + certSec + eduSec + builtSec + '</main>' + footer;
 
 fs.mkdirSync(outDir, { recursive: true });
 fs.writeFileSync(path.join(outDir, 'Dean Finkelstein - Resume.html'), html, 'utf8');
@@ -537,6 +553,6 @@ const walk = o => {
   if (Array.isArray(o)) { o.forEach(walk); return; }
   if (typeof o === 'object') { Object.values(o).forEach(walk); }
 };
-walk({ n: C.name, c: C.contact, a: C.availability, t: C.tagline, s: C.summary, h: C.highlights, k: C.skills, ai: C.aiPractice, gal: C.gallery, e: C.experience, ce: C.certifications, cn: C.certNote, ed: C.education, b: C.builtWith, d: C.disclosure });
+walk({ n: C.name, c: C.contact, a: C.availability, t: C.tagline, s: C.summary, h: C.highlights, k: C.skills, ai: C.aiPractice, gal: C.gallery, pr: C.proof, e: C.experience, ce: C.certifications, cn: C.certNote, ed: C.education, b: C.builtWith, d: C.disclosure });
 fs.writeFileSync(path.join(outDir, 'web-resume-text.txt'), dump.join('\n'), 'utf8');
 console.log('wrote Dean Finkelstein - Resume.html (' + html.length + ' chars), resume.json, two Markdown copies, and web-resume-text.txt to ' + outDir);

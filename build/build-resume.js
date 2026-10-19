@@ -15,7 +15,8 @@ const outDir = process.argv[2] || '.';
 const R = require('./content').T;
 
 // ---------------------------------------------------------------- docx
-const ACCENT = 'E69138';
+const ACCENT = 'E69138';      // rules and bullets
+const ACCENT_TEXT = '9A5A12'; // accent-colored text: 5.46:1 on white, where ACCENT is 2.48:1
 const INK = '1F2328';
 const MUTED = '5B6670';
 const FONT = 'Calibri';
@@ -77,7 +78,7 @@ children.push(new Paragraph({
 }));
 children.push(new Paragraph({
   spacing: { after: 40 },
-  children: [run(R.tagline, { size: 22, color: ACCENT, bold: true })],
+  children: [run(R.tagline, { size: 22, color: ACCENT_TEXT, bold: true })],
 }));
 children.push(new Paragraph({
   spacing: { after: 20 },
@@ -159,7 +160,7 @@ const html = `<!DOCTYPE html>
 @page{size:Letter;margin:0.55in}
 html,body{margin:0;padding:0;background:#fff;color:#${INK};font-family:Calibri,Carlito,"Segoe UI",Arial,sans-serif;font-size:10pt;line-height:1.22}
 h1{font-size:22pt;margin:0 0 1pt;line-height:1.1}
-.tag{color:#${ACCENT};font-weight:700;font-size:11pt;margin:0 0 2pt}
+.tag{color:#${ACCENT_TEXT};font-weight:700;font-size:11pt;margin:0 0 2pt}
 .contact{color:#${MUTED};margin:0 0 1pt}
 .avail{font-weight:700;margin:0 0 4pt;padding-bottom:4pt;border-bottom:1.5pt solid #${ACCENT}}
 h2{font-size:10pt;letter-spacing:1px;text-transform:uppercase;margin:7pt 0 2pt;padding-bottom:1pt;border-bottom:1pt solid #${ACCENT};break-after:avoid}
