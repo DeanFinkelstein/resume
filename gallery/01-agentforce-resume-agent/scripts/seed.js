@@ -28,11 +28,9 @@ function section(key, title, build) { sec.push({ Section_Key__c: key, Name: titl
 section('summary', 'Summary', reg => [
   g(R.tagline, reg), '', g(R.summary, reg), `Sources: ${R.summary.src}`,
 ].join('\n'));
-section('availability', 'Availability and Contact', reg => [
+section('availability', 'Availability and Contact', () => [
   R.availability,
   `Location: ${R.contact[0]}. Email: ${R.contact[1]}. LinkedIn: ${R.contact[2]}.`,
-  reg === 't' ? 'Client names are left off on purpose. References are available with the client\'s consent.'
-              : 'Client names are left off on purpose. Dean can share references once the client agrees.',
 ].join('\n'));
 section('results', 'Selected Results', reg => R.highlights.map(h => `- ${g(h, reg)} (source: ${h.src})`).join('\n'));
 section('skills', 'Core Skills', reg => R.skills.map(s => `- ${g(s.label, reg)}: ${g(s, reg)}`).join('\n'));
