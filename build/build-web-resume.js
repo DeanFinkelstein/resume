@@ -10,7 +10,7 @@ const outDir = process.argv[2] || '.';
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const attr = s => esc(s).replace(/"/g, '&quot;');
 const pair = o => `<span class="t">${esc(o.t)}</span><span class="p">${esc(o.p)}</span>`;
-const src = s => s ? `<span class="src">${esc(s)}</span>` : '';
+const src = (s, href) => s ? (href ? `<a class="src" href="${attr(href)}">${esc(s)}</a>` : `<span class="src">${esc(s)}</span>`) : '';
 const aiCls = o => (o && o.ai) ? ' class="ai"' : '';
 
 const ACCENT = '#e69138';      // rules, fills, markers
@@ -32,7 +32,7 @@ function mdFor(reg) {
   L.push(C.availability, '');
   L.push('## Summary', r(C.summary), `Sources: ${C.summary.src}`, '');
   L.push('## Selected Results');
-  C.highlights.forEach(h => L.push(`- ${r(h)} (source: ${h.src})`));
+  C.highlights.forEach(h => L.push(`- ${r(h)} (source: ${h.src}${h.srcHref ? `, ${h.srcHref}` : ''})`));
   L.push('', '## Core Skills');
   C.skills.forEach(s => L.push(`- ${r(s.label)}: ${r(s)}`));
   L.push('', `## ${r(C.aiPractice.heading)}`, r(C.aiPractice.intro));
@@ -44,12 +44,12 @@ function mdFor(reg) {
   C.experience.forEach(j => {
     L.push(`### ${j.company} · ${r(j.note)} · ${j.dates}`);
     L.push(`${j.roles} (${j.src})`);
-    j.bullets.forEach(b => L.push(`- ${r(b)}${b.src ? ` (source: ${b.src})` : ''}`));
+    j.bullets.forEach(b => L.push(`- ${r(b)}${b.src ? ` (source: ${b.src}${b.srcHref ? `, ${b.srcHref}` : ''})` : ''}`));
     L.push('');
   });
   L.push('## Certifications');
-  C.certifications.forEach(c => L.push(`- ${c.name}, ${c.date}${reg === 't' ? `, ID ${c.id}` : ''}`));
-  L.push(r(C.certNote), '', '## Education');
+  C.certifications.forEach(c => L.push(`- ${c.name}, ${c.date}`));
+  L.push(r(C.certNote), `${C.certNote.src}: ${C.certNote.srcHref}`, '', '## Education');
   C.education.forEach(e => L.push(`- ${e.text} (${e.src})`));
   L.push('', `## ${C.builtWith.heading}`, r(C.builtWith.body));
   C.builtWith.pipeline.forEach(p => L.push(`- ${p}`));
@@ -72,7 +72,7 @@ const jsonLd = {
   url: C.site.href,
   sameAs: ['https://www.linkedin.com/in/deanfinkelstein/'],
   alumniOf: { '@type': 'CollegeOrUniversity', name: 'Western Governors University' },
-  hasCredential: C.certifications.map(c => ({ '@type': 'EducationalOccupationalCredential', name: c.name, credentialCategory: 'certification', dateCreated: c.date, identifier: c.id })),
+  hasCredential: C.certifications.map(c => ({ '@type': 'EducationalOccupationalCredential', name: c.name, credentialCategory: 'certification', dateCreated: c.date })),
   knowsAbout: ['Salesforce', 'Managed Services', 'CRM Analytics', 'Tableau', 'Field Service', 'Claude Code', 'MCP', 'Agentforce'],
 };
 const resumeJson = {
@@ -151,6 +151,7 @@ li::marker{color:var(--accent)}
 .src{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:999px;background:var(--soft);border:1px solid var(--soft2);color:#7a4a12;font-family:var(--mono);font-size:11.5px;line-height:1.5;white-space:nowrap;vertical-align:middle}
 .srcline{margin:-2px 0 0;font-size:12.5px;color:var(--muted)}
 .srcline .src{margin-left:0}
+a.src{border-bottom:1px solid var(--soft2);text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:2px}
 
 .results{list-style:none;padding:0;margin:0;border-top:1px solid var(--rule)}
 .results li{display:grid;grid-template-columns:1fr auto;gap:6px 18px;align-items:start;padding:8px 0;margin:0;border-bottom:1px solid var(--rule)}
@@ -165,7 +166,6 @@ li::marker{color:var(--accent)}
 .roles{font-style:italic;margin:0 0 6px}
 .certs{list-style:none;padding:0;margin:0 0 6px;columns:2;column-gap:28px}
 .certs li{break-inside:avoid;margin:0 0 5px}
-.certs .id{color:var(--muted);font-family:var(--mono);font-size:12px}
 
 /* AI tooling in practice */
 .dg{display:block;width:100%;height:auto;margin:6px 0 10px;border:1px solid var(--rule);border-radius:6px;background:#fff}
@@ -305,7 +305,7 @@ footer p{margin:0 0 4px}
 }
 </style>
 </head>
-<body>
+<body class="tech">
 `;
 
 const header = `
@@ -321,9 +321,9 @@ const header = `
     </div>
     <div class="controls">
       <div class="toggle" role="group" aria-label="Reading version">
-        <button type="button" id="btn-plain" aria-pressed="true">Plain English</button>
+        <button type="button" id="btn-tech" aria-pressed="true">Technical</button>
         <span class="bar" aria-hidden="true">|</span>
-        <button type="button" id="btn-tech" aria-pressed="false">Technical</button>
+        <button type="button" id="btn-plain" aria-pressed="false">Plain English</button>
       </div>
       <div class="btnrow">
         <button type="button" class="btn" id="btn-ai" aria-pressed="false">Show the AI work</button>
@@ -348,7 +348,7 @@ const resultsSec = `
 <section id="results">
   <h2>Selected Results</h2>
   <ol class="results">
-${C.highlights.map(h => `    <li${aiCls(h)}><span class="claim">${pair(h)}</span>${src(h.src)}</li>`).join('\n')}
+${C.highlights.map(h => `    <li${aiCls(h)}><span class="claim">${pair(h)}</span>${src(h.src, h.srcHref)}</li>`).join('\n')}
   </ol>
 </section>
 `;
@@ -469,18 +469,18 @@ ${C.experience.map(j => `
   <div class="job"><span><span class="co">${esc(j.company)}</span> <span class="note">· ${pair(j.note)}</span></span><span class="dates">${esc(j.dates)}</span></div>
   <p class="roles">${esc(j.roles)}${j.src ? ' ' + src(j.src) : ''}</p>
   <ul>
-${j.bullets.map(b => `    <li${aiCls(b)}>${pair(b)}${b.src ? src(b.src) : ''}</li>`).join('\n')}
+${j.bullets.map(b => `    <li${aiCls(b)}>${pair(b)}${b.src ? src(b.src, b.srcHref) : ''}</li>`).join('\n')}
   </ul>`).join('\n')}
 </section>
 `;
 
 const certSec = `
 <section id="certifications">
-  <h2>Certifications</h2>
+  <h2>Salesforce Certifications</h2>
   <ul class="certs">
-${C.certifications.map(c => `    <li${aiCls(c)}>${esc(c.name)}, ${esc(c.date)}<span class="t"> <span class="id">ID ${esc(c.id)}</span></span></li>`).join('\n')}
+${C.certifications.map(c => `    <li${aiCls(c)}>${esc(c.name.replace(/^Salesforce Certified /, ''))}, ${esc(c.date)}</li>`).join('\n')}
   </ul>
-  <p${aiCls(C.certNote)}>${pair(C.certNote)}${src(C.certNote.src)}</p>
+  <p${aiCls(C.certNote)}>${pair(C.certNote)}${src(C.certNote.src, C.certNote.srcHref)}</p>
 </section>
 `;
 
@@ -604,7 +604,7 @@ const footer = `
     });
   });
   setAI(false);
-  if(location.hash==='#technical'){setReg('tech');}
+  if(location.hash==='#plain'){setReg('plain');}
   if(location.hash==='#ai'){setAI(true);}
 })();
 </script>

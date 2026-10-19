@@ -8,14 +8,14 @@ node build-web-resume.js out
 node build-resume.js out
 ```
 
-- `build-web-resume.js` writes `Dean Finkelstein - Resume.html` (the web page with the Email, PDF, and Word buttons, the Plain English | Technical switch, the Show-the-AI-work mode, the source tags, the AI tooling diagram with a stacked-list version for phones, the gallery with the Agentforce demo video, the How-this-page-was-built section, and the copy-as-Markdown button), plus `resume.json` (the same content for machines; keep it beside the page), two Markdown copies, `favicon.svg`, and `og-card.html` (the link-preview card). The footer date and `resume.json`'s `generated` field are the build date. Open the page with `#technical` to start in Technical, `#ai` to start in AI mode, or `#ask` to open the chat panel (the Proof block in the PDFs links there). Items flagged `ai: true` in `content.js` light up in AI mode.
+- `build-web-resume.js` writes `Dean Finkelstein - Resume.html` (the web page with the Email, PDF, and Word buttons, the Technical | Plain English switch (the page opens in Technical), the Show-the-AI-work mode, the source tags, the AI tooling diagram with a stacked-list version for phones, the gallery with the Agentforce demo video, the How-this-page-was-built section, and the copy-as-Markdown button), plus `resume.json` (the same content for machines; keep it beside the page), two Markdown copies, `favicon.svg`, and `og-card.html` (the link-preview card). The footer date and `resume.json`'s `generated` field are the build date. Open the page with `#plain` to start in Plain English, `#ai` to start in AI mode, or `#ask` to open the chat panel (the Proof block in the PDFs links there). Items flagged `ai: true` in `content.js` light up in AI mode.
 - `build-resume.js` writes `Dean Finkelstein - Resume.docx`, the plain Word copy (Technical, no source tags) for ATS uploads.
 
 To make the PDFs, print the web page from Chrome (Letter, headers and footers off) once with each version switched on, or with headless Chrome. The print layout leaves out the buttons, the diagram, the gallery cards, and the source tags, and adds the page URL to the contact line plus a three-line Proof block that links back to the work. Each version must fit on two Letter pages.
 
 ```
-chrome --headless=new --no-pdf-header-footer --print-to-pdf="out/plain.pdf" "file:///<path>/Dean Finkelstein - Resume.html"
-chrome --headless=new --no-pdf-header-footer --print-to-pdf="out/technical.pdf" "file:///<path>/Dean Finkelstein - Resume.html#technical"
+chrome --headless=new --no-pdf-header-footer --print-to-pdf="out/plain.pdf" "file:///<path>/Dean Finkelstein - Resume.html#plain"
+chrome --headless=new --no-pdf-header-footer --print-to-pdf="out/technical.pdf" "file:///<path>/Dean Finkelstein - Resume.html"
 ```
 
 Render the link-preview card to a 1200x630 PNG the same way:

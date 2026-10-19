@@ -5,7 +5,7 @@
 
 const name = 'Dean Finkelstein';
 const contact = ['Matamoras, PA', 'finkelstein.dean@gmail.com', 'linkedin.com/in/deanfinkelstein'];
-const availability = 'Availability: remote, part-time roles only. Freelance engagements welcome.';
+const availability = 'Availability: remote part-time, 20 to 30 hours a week, W2 or 1099, can start now. Evenings and weekends ET; daytime calls by appointment.';
 
 const tagline = {
   t: 'Salesforce Managed Services Team Lead  |  8x Salesforce Certified  |  Builds AI and agentic tooling',
@@ -13,44 +13,48 @@ const tagline = {
 };
 
 const summary = {
-  t: 'Salesforce consultant and team lead with five years at a Salesforce consulting partner and seven years before that in sales management and CRM administration. Leads a 13-client managed-services book at Cirrius Solutions: 80% renewal rate in H1 2026, top project-success score on the team, and one of nine delivery leads named on the entry that won Cirrius the 2027 Salesforce Partner of the Year for Customer Value. Builds AI tooling for his own operation and for clients, from a Claude Code operations agent to an AI security briefing now reused company-wide. Makes complex technical work simple for the people who depend on it, and still carries hands-on delivery as a lead.',
-  p: 'Five years at a firm that helps companies run Salesforce, the system businesses use to track customers, sales, and service. Seven years before that managing sales teams and the systems they ran on. Looks after thirteen companies on retainer at Cirrius Solutions: eight in ten renewed in the first half of 2026, and he holds the best project score on the team. One of nine people named on the work that won the firm a Salesforce Partner of the Year award. Builds AI tools for his own work and for clients. Explains hard things in plain words, and still does the hands-on work himself.',
-  src: 'H1 2026 review, Jul 2026; company announcement, Sep 2026; 2026 self-evaluation',
+  t: 'Salesforce consultant and team lead with five years at a Salesforce consulting partner and seven years before that in sales management and CRM administration. Leads a 13-client managed-services book at Cirrius Solutions: 80% renewal rate in H1 2026 (8 of 10 renewals due), the highest client survey (CSAT) score on the team, and one of nine delivery leads named on the entry that won Cirrius the 2027 Salesforce Partner of the Year for Customer Value. Builds AI tooling for his own operation and for clients, from a Claude Code operations agent to an AI security briefing now reused company-wide. Makes complex technical work simple for the people who depend on it, and still carries hands-on delivery as a lead.',
+  p: 'Five years at a firm that helps companies run Salesforce, the system businesses use to track customers, sales, and service. Seven years before that managing sales teams and the systems they ran on. Looks after thirteen companies on retainer at Cirrius Solutions: eight of the ten contracts up for renewal in the first half of 2026 renewed, with the highest client survey score on the team. One of nine people named on the work that won the firm a Salesforce Partner of the Year award. Builds AI tools for his own work and for clients. Explains hard things in plain words, and still does the hands-on work himself.',
+  src: 'Internal review, Jul 2026; Salesforce announcement, Sep 2026; 2026 self-evaluation',
 };
 
 const highlights = [
-  { t: 'Widest client portfolio on the Managed Services team (13 clients). Renewal rate climbed to 80% in H1 2026. Top project-success score on the team.',
-    p: 'Thirteen companies on retainer, the most on the team. Eight in ten renewed in the first half of 2026. Best project score on the team.',
-    src: 'H1 2026 review, Jul 2026' },
+  { t: 'Widest client portfolio on the Managed Services team (13 clients). 80% renewal rate in H1 2026 (8 of 10 renewals due). Highest client survey (CSAT) score on the team.',
+    p: 'Thirteen companies on retainer, the most on the team. Eight of the ten contracts up for renewal in the first half of 2026 renewed. Highest client survey score on the team.',
+    src: 'Internal review, Jul 2026' },
   { t: 'Named as one of nine contributing delivery leads on the entry that won Cirrius the 2027 Salesforce Partner of the Year for Customer Value (Sept 2026).',
-    p: 'One of nine people named on the work that won the firm a 2027 Salesforce Partner of the Year award (Sept 2026).',
-    src: 'Company announcement, Sep 2026' },
+    p: 'One of nine people named on the work that won the firm a 2027 Salesforce Partner of the Year award for Customer Value (Sept 2026).',
+    src: 'Salesforce announcement, Sep 2026',
+    srcHref: 'https://www.salesforce.com/blog/announcing-the-2027-salesforce-partner-of-the-year-award-winners/' },
   { t: 'Closed two managed-services renewals in Jul and Aug 2026, one of them for a further 12 months.',
     p: 'Two companies re-signed their support contracts in July and August 2026, one of them for another full year.',
     src: 'Renewal notices, Jul and Aug 2026' },
   { t: 'Converted a 244-line Health Cloud audit into 96 structured ClickUp tasks in about ten minutes with Claude Code and MCP. The same work previously took half a day by hand.',
     p: 'Turned a 244-line audit document into 96 tracked tasks in about ten minutes using an AI assistant. By hand it took half a day.',
     src: '2026 self-evaluation', ai: true },
-  { t: 'Led a Field Service rollout that leadership called “a resounding success” and shipped a sales team’s KPI dashboard in CRM Analytics to their Sales homepage.',
-    p: 'Set up the system a client uses to schedule technicians (leadership called it “a resounding success”) and built a sales team a dashboard that now sits on their home page.',
+  { t: 'Led a Field Service rollout that leadership praised as a clear success, and shipped a sales team’s KPI dashboard in CRM Analytics to their Sales homepage.',
+    p: 'Set up the system a client uses to schedule technicians, which leadership praised as a clear success, and built a sales team a dashboard that now sits on their home page.',
     src: 'Leadership email, Mar 2026; client announcement, Aug 2026' },
 ];
 
 const skills = [
-  { label: { t: 'Salesforce', p: 'Salesforce' },
-    t: 'Sales Cloud, Service Cloud, Field Service, Experience Cloud, Data Cloud, Health Cloud, Platform App Builder, Lightning, permission sets and persona models, sandbox strategy, Production deployments and smoke testing, Salesforce Maps',
-    p: 'Setting up and running the system companies use to track customers, sales, service, and field technicians. Deciding who sees what. Moving changes into the live system without breaking it.' },
+  { label: { t: 'Administration and development', p: 'Running Salesforce' },
+    t: 'Flow, validation rules and formulas, users, profiles, roles, permission sets and sharing, Data Loader, sandbox strategy, change sets, Production deployments; Apex, SOQL, Lightning Web Components (LWC), SFDX, Git',
+    p: 'Running the system day to day: automating steps, setting rules that keep data clean, deciding who sees and does what, bringing data in, and moving changes into the live system without breaking it. Writes code on Salesforce when settings alone are not enough.' },
+  { label: { t: 'Clouds', p: 'Salesforce products' },
+    t: 'Sales Cloud, Service Cloud, Experience Cloud, Health Cloud, Field Service, Salesforce Maps; Data Cloud (Data 360): setup, data streams and model, identity resolution, segments and activations',
+    p: 'The parts of Salesforce for sales, customer service, field technicians, customer websites, healthcare, and maps. Also the part that pulls customer data from many systems into one profile per person and groups people for outreach.' },
   { label: { t: 'Analytics', p: 'Dashboards' },
     t: 'CRM Analytics (CRMA), Tableau, Tableau Next, Lightning reports and dashboards',
     p: 'Charts and dashboards that show a business how it is doing, built simple enough that people use them.' },
   { label: { t: 'Integrations', p: 'Connections' },
-    t: 'DocuSign CLM, carrier API diagnosis and remediation, SOAP Login Retirement analysis, Zapier, Salesmate, Delphi CRM',
-    p: 'Connecting the customer system to other software (contract signing, mobile carriers, maps) and fixing the link when it breaks. Earlier tools: Zapier, Salesmate, Delphi.' },
+    t: 'DocuSign CLM, RingCentral, CallRail, carrier API remediation, SOAP Login Retirement analysis, Zapier, Salesmate, Delphi CRM',
+    p: 'Connecting the customer system to other software (contract signing, phone systems, call tracking, mobile carriers, maps) and fixing the link when it breaks. Earlier tools: Zapier, Salesmate, Delphi.' },
   { label: { t: 'AI and agentic tooling', p: 'AI tools' }, ai: true,
-    t: 'Claude Code, MCP, Agentforce, Obsidian, VS Code, AI security briefings (OAuth, data retention, licensing), SharinPix “Work with AI”',
-    p: 'Building AI helpers with Claude Code and related tools, and showing a client’s IT team how to adopt AI safely.' },
+    t: 'Claude Code, MCP, Obsidian, SharinPix “Work with AI”, AI security briefings. Einstein for clients: Activity Capture, Lead and Opportunity Scoring, bots, Conversation Insights. Agentforce (Agent Script, Prompt Builder, Apex actions): practice builds, not yet for clients',
+    p: 'Building AI helpers with Claude Code and related tools, and showing a client’s IT team how to adopt AI safely. Setting up Salesforce’s built-in AI features for clients (email and calendar sync, lead scoring, chat bots, call analysis). Has built Salesforce AI agents from start to finish in practice accounts, not yet for a client.' },
   { label: { t: 'Delivery and leadership', p: 'Running the work' },
-    t: 'Managed services, SOW renewals, UAT coordination, End of Month reviews, pre-sales support, team leadership, ClickUp',
+    t: 'Managed services, SOW renewals, UAT coordination, End of Month reviews, pre-sales support, team leadership',
     p: 'Ongoing support contracts, renewals, client testing, monthly reviews with clients, sales support, and leading a team.' },
 ];
 
@@ -64,7 +68,7 @@ const experience = [
     bullets: [
       { t: 'Own delivery outcomes across a 13-client managed-services book. Lead the Managed Services team day to day, line-manage two consultants, run the daily standup, and carry hands-on technical delivery alongside.',
         p: 'Responsible for results across thirteen companies on retainer. Runs the team day to day, coaches two consultants, runs the daily check-in, and still does hands-on work.',
-        src: 'H1 2026 review, Jul 2026' },
+        src: 'Internal review, Jul 2026' },
       { t: 'Run client governance: End of Month reviews, SOW renewals, and named point of contact for one client’s data work. Built a pre-sales deck that leadership credited with getting the deal across the line.',
         p: 'Holds monthly reviews with clients, handles contract renewals, and is one client’s named contact for anything to do with their data. Built a sales deck that leadership said got the deal across the line.',
         src: 'Leadership message, Apr 2026; client email, Oct 2026' },
@@ -79,7 +83,7 @@ const experience = [
         src: 'Client announcement, Aug 2026; leadership message, Jul 2026' },
       { t: 'For a client with a carrier API integration: verified the client’s own failure diagnosis read-only against the org, confirmed it held, and caught a gap on the reschedule path the client had missed. Took ownership of the remediation build; the client’s CEO confirmed the catch in writing.',
         p: 'For a client whose system talks to a mobile carrier: checked their own diagnosis of a failing connection without changing anything, confirmed they were right, and found one more case they had missed. Took on the fix. Their CEO confirmed the catch in writing.',
-        src: 'Client CEO email, Oct 2026' },
+        src: 'Client email, Oct 2026' },
       { t: 'For a field-service client: led the Field Service (FSM) rollout and delivered Salesforce Maps enablement with a short walkthrough video.',
         p: 'For a client with technicians in the field: set up the system that schedules their jobs, and added maps with a short how-to video.',
         src: 'Leadership email, Mar 2026; client email, Apr 2026' },
@@ -89,9 +93,9 @@ const experience = [
       { t: 'AI and methodology: run a Claude Code plus Obsidian operations agent that keeps project pictures, daily notes, and task tracking current. Connected Claude Code into a client org through VS Code to pull every piece of metadata a package touched. Built a reusable skill that turns a client’s form requirements (Sheet, Doc, or PDF) into a ready-to-run SharinPix “Work with AI” prompt, with a back-up-first rule. Share the approach and demos with the team.',
         p: 'Built an AI assistant that keeps project notes, daily plans, and task lists current. Connected an AI assistant to a client’s system to pull out every piece a software package touched. Built a tool that turns a client’s form requirements into ready-to-run instructions for a form builder, with a back-up-first rule. Shares the approach with the team.',
         src: '2026 self-evaluation', ai: true },
-      { t: 'Featured guest on the Cirrius podcast episode on Salesforce security (Apr 2026). H1 2026 review: “one of the most trusted and high-impact leaders we have.”',
-        p: 'Guest on the firm’s podcast episode about keeping Salesforce safe (April 2026). Mid-year review: “one of the most trusted and high-impact leaders we have.”',
-        src: 'Company post, Apr 2026; H1 2026 review, Jul 2026' },
+      { t: 'Featured guest on the Cirrius podcast episode on Salesforce security (Apr 2026). Rated among the firm’s most trusted, high-impact leaders in the mid-year review.',
+        p: 'Guest on the firm’s podcast episode about keeping Salesforce safe (April 2026). Rated among the firm’s most trusted leaders in the mid-year review.',
+        src: 'Company post, Apr 2026; internal review, Jul 2026' },
     ],
   },
   {
@@ -139,20 +143,22 @@ const experience = [
   },
 ];
 
+// Names as Salesforce lists them today, with the older name where it was renamed. Checked 2026-10-18 on the verification page.
 const certifications = [
-  { name: 'Salesforce Certified AI Specialist', date: 'Oct 2024', id: '4961332', ai: true },
-  { name: 'Salesforce Certified Data Cloud Consultant', date: 'Sep 2024', id: '4947266', ai: true },
-  { name: 'Salesforce Certified Experience Cloud Consultant', date: 'Aug 2023', id: '3608672' },
-  { name: 'Salesforce Field Service Consultant', date: 'Feb 2023', id: '2988939' },
-  { name: 'Salesforce Certified Sales Cloud Consultant', date: 'Jul 2022', id: '2436727' },
-  { name: 'Salesforce Certified Service Cloud Consultant', date: 'Apr 2022', id: '2282712' },
-  { name: 'Salesforce Certified Platform App Builder Certification', date: 'Oct 2021', id: '22547271' },
-  { name: 'Salesforce Certified Administrator (SCA)', date: 'Feb 2021', id: '21861521' },
+  { name: 'Salesforce Certified Agentforce Specialist (formerly AI Specialist)', date: 'Oct 2024', ai: true },
+  { name: 'Salesforce Certified Data 360 Consultant (formerly Data Cloud Consultant)', date: 'Sep 2024', ai: true },
+  { name: 'Salesforce Certified Experience Cloud Consultant', date: 'Aug 2023' },
+  { name: 'Salesforce Certified Agentforce Field Service and Operations Consultant (formerly Field Service Consultant)', date: 'Feb 2023' },
+  { name: 'Salesforce Certified Agentforce Sales Consultant (formerly Sales Cloud Consultant)', date: 'Jul 2022' },
+  { name: 'Salesforce Certified Agentforce Service Consultant (formerly Service Cloud Consultant)', date: 'Apr 2022' },
+  { name: 'Salesforce Certified Platform App Builder', date: 'Oct 2021' },
+  { name: 'Salesforce Certified Platform Administrator (formerly Administrator)', date: 'Feb 2021' },
 ];
 const certNote = {
-  t: 'Trailhead Ranger; seven Trailhead superbadges (2021). In progress: Anthropic and OpenAI certification track.',
-  p: 'Top rank on Salesforce’s training site and seven hands-on badges there (2021). Working through Anthropic and OpenAI certifications.',
-  src: 'Credential IDs verifiable with Salesforce',
+  t: 'All eight current. Trailhead Ranger; seven Trailhead superbadges (2021). In progress: Anthropic and OpenAI certification track.',
+  p: 'All eight are current. Ranger rank on Salesforce’s training site and seven hands-on badges there (2021). Working through Anthropic and OpenAI certifications.',
+  src: 'Verify by name with Salesforce',
+  srcHref: 'https://trailhead.salesforce.com/en/credentials/verification/',
   ai: true,
 };
 

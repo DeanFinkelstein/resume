@@ -45,7 +45,7 @@ for (const j of R.experience) {
   ].join('\n'));
 }
 section('certifications', 'Certifications', reg => [
-  ...R.certifications.map(c => `- ${c.name}, ${c.date}${reg === 't' ? `, credential ID ${c.id}` : ''}`), g(R.certNote, reg),
+  ...R.certifications.map(c => `- ${c.name}, ${c.date}${reg === 't' && c.id ? `, credential ID ${c.id}` : ''}`), g(R.certNote, reg),
 ].join('\n'));
 section('education', 'Education', () => R.education.map(e => `- ${e.text} (source: ${e.src})`).join('\n'));
 section('about-agent', 'About This Agent', reg => reg === 't'
@@ -53,8 +53,11 @@ section('about-agent', 'About This Agent', reg => reg === 't'
   : 'This assistant runs on Salesforce\'s AI agent product, Agentforce, in a practice Salesforce account Dean set up for his portfolio. Everything it knows comes from his resume, loaded into Salesforce from the same file his resume page is built from. It can look up his experience, list his certifications, and pass a message to him. It never names a client, because that information is not in it. Dean built a second assistant on his resume page that does the same job with Claude, so you can compare the two.');
 
 // ---------------------------------------------------------------- credentials
+// resume.json no longer carries credential IDs (anyone can verify by name with Salesforce), so the upsert key falls back
+// to a slug of the current certification name.
+const credKey = c => c.id || c.name.replace(/\s*\(formerly[^)]*\)$/, '').replace(/^Salesforce Certified /, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const cred = R.certifications.map((c, i) => ({
-  Credential_Id__c: c.id, Name: c.name, Issuer__c: 'Salesforce', Date_Earned__c: c.date, AI_Related__c: c.ai ? 'true' : 'false', Sort_Order__c: i + 1,
+  Credential_Id__c: credKey(c), Name: c.name, Issuer__c: 'Salesforce', Date_Earned__c: c.date, AI_Related__c: c.ai ? 'true' : 'false', Sort_Order__c: i + 1,
 }));
 
 // ---------------------------------------------------------------- engagements

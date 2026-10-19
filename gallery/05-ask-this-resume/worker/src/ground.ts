@@ -4,7 +4,7 @@
 type Pair = { t: string; p: string; src?: string; ai?: boolean };
 type Skill = Pair & { label: Pair };
 type Job = { company: string; note: Pair; dates: string; roles: string; src?: string; bullets: Pair[] };
-type Cred = { name: string; date: string; id: string };
+type Cred = { name: string; date: string; id?: string };
 
 export interface Resume {
   generated: string;
@@ -49,7 +49,7 @@ function render(r: Resume, reg: 't' | 'p'): string {
     L.push('');
   }
   L.push('## Certifications');
-  for (const c of r.certifications) L.push(`- ${c.name}, ${c.date}${reg === 't' ? `, credential ID ${c.id}` : ''}`);
+  for (const c of r.certifications) L.push(`- ${c.name}, ${c.date}${reg === 't' && c.id ? `, credential ID ${c.id}` : ''}`);
   L.push(g(r.certNote), '', '## Education');
   for (const e of r.education) L.push(`- ${e.text} (${e.src})`);
   L.push('', `## ${r.builtWith.heading}`, g(r.builtWith.body), '', g(r.disclosure));
