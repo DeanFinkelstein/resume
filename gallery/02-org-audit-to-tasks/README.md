@@ -30,7 +30,7 @@ Then, in Claude Code, run the skill and approve the list before anything is crea
 | Audit, 11 read-only checks | 36 findings in 41 seconds: 16 high, 9 medium, 11 low |
 | Shape into tasks | 7 tasks with checklists and acceptance criteria, in under a second |
 | Review | Two edits before creation: the org's only admin dropped as an accepted exception, and the never-logged-in task reworded so nobody deactivates the Resume Agent's run-as user |
-| Create the tasks | 7 GitHub issues in 12 seconds: [issues 1 to 7](https://github.com/DeanFinkelstein/resume/issues?q=label%3Aorg-audit) |
+| Create the tasks | 7 GitHub issues in 12 seconds. The text of each one is in [out/issues-preview.md](out/issues-preview.md) |
 | Rerun after turning on MFA | 37 findings in 46 seconds; the Health Check score rose from 64 to 69. The first run is kept in `out/before-mfa/` |
 
 What it found in a brand-new org is the point. Multi-factor authentication was off, the Security Health Check score was 64, two users held Modify All Data or View All Data, four licensed users had never logged in, and org-wide Apex coverage was 0 percent because the sample app's tests had never run. The findings in `out/` are redacted with `--redact`: usernames, email addresses, the org ID, and the org address are masked.
