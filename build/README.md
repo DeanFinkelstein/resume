@@ -18,6 +18,6 @@ chrome --headless=new --no-pdf-header-footer --print-to-pdf="out/plain.pdf" "fil
 chrome --headless=new --no-pdf-header-footer --print-to-pdf="out/technical.pdf" "file:///<path>/Dean Finkelstein - Resume.html#technical"
 ```
 
-Before sending anything, run `python qa.py <file>` on the output. It flags em-dashes, the avoid-list words, and client names. Rules the content follows: no em-dashes, none of the avoid-list words, every quote verbatim, every number sourced, no client names or client contacts.
+Before sending anything, run `python qa.py <file>` on the output. It flags em-dashes and en-dashes, the avoid-list words, and client names, reads PDFs and Word files as well as text, and exits 1 on any hit. The client names come from `clients.local.txt` beside it, one per line. That file is git-ignored and never published, and without it the scan exits 2 instead of passing. Rules the content follows: no em-dashes, none of the avoid-list words, every quote verbatim, every number sourced, no client names or client contacts.
 
 To retarget for a posting, change the tagline, the summary, and the order of Selected Results first.

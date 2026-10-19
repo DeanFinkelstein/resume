@@ -4,6 +4,7 @@ Dean Finkelstein - COP Resume.html
 Dean Finkelstein - COP Resume.md
 SETUP-GUIDE.md
 .claude/
+build/*.local.txt
 
 # Installed packages, build caches, local secrets
 node_modules/
