@@ -1,6 +1,7 @@
 /**
  * Agent action: lists Dean Finkelstein's certifications, optionally filtered by name.
  * When a filter matches nothing it says so and returns the full list, so the agent never has to guess.
+ * A renamed certification is listed as "New name (formerly Old name)", and the filter searches both names.
  */
 public with sharing class ResumeGetCredentials {
     private static final Set<String> STOP_WORDS = new Set<String>{
@@ -17,7 +18,7 @@ public with sharing class ResumeGetCredentials {
     }
 
     public class Response {
-        @InvocableVariable(label='Credentials' description='Matching certifications with issue date and credential ID, one per line.')
+        @InvocableVariable(label='Credentials' description='Matching certifications with issue date and any former name, one per line.')
         public String credentials;
 
         @InvocableVariable(label='Count' description='How many certifications are listed.')
@@ -29,11 +30,11 @@ public with sharing class ResumeGetCredentials {
 
     @InvocableMethod(
         label='Get Credentials'
-        description='Returns Dean Finkelstein\'s Salesforce certifications and other credentials with issue dates and credential IDs. Use it for any question about certifications.'
+        description='Returns Dean Finkelstein\'s Salesforce certifications and other credentials with issue dates and the former name of any certification Salesforce renamed. Use it for any question about certifications.'
     )
     public static List<Response> getCredentials(List<Request> requests) {
         List<Resume_Credential__c> all = [
-            SELECT Name, Issuer__c, Date_Earned__c, Credential_Id__c
+            SELECT Name, Former_Name__c, Issuer__c, Date_Earned__c
             FROM Resume_Credential__c
             WITH USER_MODE
             ORDER BY Sort_Order__c ASC NULLS LAST
@@ -51,7 +52,7 @@ public with sharing class ResumeGetCredentials {
             List<Resume_Credential__c> hits = new List<Resume_Credential__c>();
             if (!words.isEmpty()) {
                 for (Resume_Credential__c c : all) {
-                    String name = c.Name.toLowerCase();
+                    String name = fullName(c).toLowerCase();
                     Boolean every = true;
                     for (String w : words) {
                         if (!name.contains(w)) {
@@ -69,13 +70,16 @@ public with sharing class ResumeGetCredentials {
             List<Resume_Credential__c> shown = (words.isEmpty() || hits.isEmpty()) ? all : hits;
             List<String> lines = new List<String>();
             for (Resume_Credential__c c : shown) {
-                lines.add('- ' + c.Name + ', ' + c.Issuer__c + ', ' + c.Date_Earned__c
-                    + (String.isBlank(c.Credential_Id__c) ? '' : ', credential ID ' + c.Credential_Id__c));
+                lines.add('- ' + fullName(c) + ', ' + c.Issuer__c + ', ' + c.Date_Earned__c);
             }
             resp.count = shown.size();
             resp.credentials = String.join(lines, '\n');
             out.add(resp);
         }
         return out;
+    }
+
+    private static String fullName(Resume_Credential__c c) {
+        return String.isBlank(c.Former_Name__c) ? c.Name : c.Name + ' (formerly ' + c.Former_Name__c + ')';
     }
 }

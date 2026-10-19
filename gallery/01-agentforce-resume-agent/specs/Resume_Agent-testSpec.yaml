@@ -15,7 +15,7 @@ testCases:
   - utterance: "Is he certified in Data Cloud?"
     expectedTopic: resume_questions
     expectedActions: [get_credentials]
-    expectedOutcome: "Yes: Salesforce Certified Data Cloud Consultant, earned September 2024."
+    expectedOutcome: "Yes: Salesforce Certified Data 360 Consultant (formerly Data Cloud Consultant), earned September 2024."
     metrics: [completeness, conciseness]
   - utterance: "Does he have a Marketing Cloud certification?"
     expectedTopic: resume_questions

@@ -1,0 +1,129 @@
+{
+  "agent": "Resume_Agent",
+  "org": "resume-dev",
+  "run": "2026-10-19T03:52:09.461Z",
+  "results": [
+    {
+      "n": 1,
+      "utterance": "Is he certified in Data Cloud?",
+      "expectedTopic": "resume_questions",
+      "expectedActions": [
+        "get_credentials"
+      ],
+      "expectedOutcome": "Yes: Salesforce Certified Data 360 Consultant (formerly Data Cloud Consultant), earned September 2024. No credential ID.",
+      "welcome": "Hi, I answer questions about Dean Finkelstein's experience, certifications, and availability, using only his resume. What would you like to know?",
+      "response": "Yes, Dean holds the Salesforce Certified Data 360 Consultant certification (formerly Data Cloud Consultant), issued in September 2024. Would you like details on his Data Cloud project work or other certifications?",
+      "messageTypes": [
+        "Inform"
+      ],
+      "trace": {
+        "topics": [
+          "resume_questions"
+        ],
+        "actions": [
+          {
+            "name": "get_profile",
+            "input": {
+              "register": "Both"
+            },
+            "status": "success"
+          },
+          {
+            "name": "get_credentials",
+            "input": {
+              "nameFilter": "Data Cloud"
+            },
+            "status": "success"
+          }
+        ],
+        "groundedness": {
+          "category": "GROUNDED",
+          "reason": "The claim that Dean holds the Salesforce Certified Data 360 Consultant certification, formerly Data Cloud Consultant, issued in September 2024, is directly supported by the function_history. The follow-up question does not assert any new facts."
+        },
+        "instructionAdherence": "HIGH",
+        "taskResolution": "FULLY_RESOLVED",
+        "contentSafe": true
+      },
+      "seconds": 7.5
+    },
+    {
+      "n": 2,
+      "utterance": "What are his hours?",
+      "expectedTopic": "resume_questions",
+      "expectedActions": [
+        "get_profile"
+      ],
+      "expectedOutcome": "Remote part-time, 20 to 30 hours a week, evenings and weekends ET, daytime calls by appointment.",
+      "welcome": "Hi, I answer questions about Dean Finkelstein's experience, certifications, and availability, using only his resume. What would you like to know?",
+      "response": "Dean is available for remote part-time roles, 20 to 30 hours a week. He works evenings and weekends ET, and can do daytime calls by appointment. If you need more details or want to discuss a specific schedule, I can pass your question to him. Would you like to do that?",
+      "messageTypes": [
+        "Inform"
+      ],
+      "trace": {
+        "topics": [
+          "resume_questions"
+        ],
+        "actions": [
+          {
+            "name": "get_profile",
+            "input": {
+              "register": "Both"
+            },
+            "status": "success"
+          }
+        ],
+        "groundedness": {
+          "category": "GROUNDED",
+          "reason": "All claims about Dean's availability, working hours, and willingness to discuss a specific schedule are directly supported by the resume information in the provided context."
+        },
+        "instructionAdherence": null,
+        "taskResolution": null,
+        "contentSafe": true
+      },
+      "seconds": 3.8
+    },
+    {
+      "n": 3,
+      "utterance": "List his certifications.",
+      "expectedTopic": "resume_questions",
+      "expectedActions": [
+        "get_credentials"
+      ],
+      "expectedOutcome": "Eight certifications under their current names, with former names where renamed, and dates. No credential IDs.",
+      "welcome": "Hi, I answer questions about Dean Finkelstein's experience, certifications, and availability, using only his resume. What would you like to know?",
+      "response": "Dean Finkelstein holds these eight current Salesforce certifications:\n\nSalesforce Certified Agentforce Specialist (formerly AI Specialist), issued Oct 2024\nSalesforce Certified Data 360 Consultant (formerly Data Cloud Consultant), issued Sep 2024\nSalesforce Certified Experience Cloud Consultant, issued Aug 2023\nSalesforce Certified Agentforce Field Service and Operations Consultant (formerly Field Service Consultant), issued Feb 2023\nSalesforce Certified Agentforce Sales Consultant (formerly Sales Cloud Consultant), issued Jul 2022\nSalesforce Certified Agentforce Service Consultant (formerly Service Cloud Consultant), issued Apr 2022\nSalesforce Certified Platform App Builder, issued Oct 2021\nSalesforce Certified Platform Administrator (formerly Administrator), issued Feb 2021\n\nWould you like more details about any of these certifications or Dean’s experience with them?",
+      "messageTypes": [
+        "Inform"
+      ],
+      "trace": {
+        "topics": [
+          "resume_questions"
+        ],
+        "actions": [
+          {
+            "name": "get_profile",
+            "input": {
+              "register": "Both"
+            },
+            "status": "success"
+          },
+          {
+            "name": "get_credentials",
+            "input": {
+              "nameFilter": ""
+            },
+            "status": "success"
+          }
+        ],
+        "groundedness": {
+          "category": "GROUNDED",
+          "reason": "The response lists Dean Finkelstein's eight current Salesforce certifications, which matches exactly with the results returned by the get_credentials function."
+        },
+        "instructionAdherence": "HIGH",
+        "taskResolution": "FULLY_RESOLVED",
+        "contentSafe": true
+      },
+      "seconds": 5.2
+    }
+  ]
+}

@@ -14,6 +14,7 @@ The CLI's built-in test runners could not be used in this org. The Testing Cente
 | 2 | 2026-10-18 17:23 | 1, by mistake | 16 | Not graded | Version 2 was published but not yet active; this run tested version 1 again. Kept in `out/run-2-v1-by-mistake/` for the record |
 | 3 | 2026-10-18 17:25 | 2 | 16 | 13 pass, 1 partial, 2 fail | Grounding fix, routing fix, contact rules, test 16 added |
 | 4 | 2026-10-18 17:28 | 2 | 2 (questions 9 and 16) | 2 pass | Duplicate-lead fix in Apex (no republish needed) |
+| 5 | 2026-10-19 03:52 | 2 | 3 (see run 5 below) | 3 pass | Org reseeded from Dean's answers: current certification names, a Former Name field, no credential IDs, new availability line |
 
 ## Final results (run 3, with questions 9 and 16 from run 4)
 
@@ -53,6 +54,24 @@ The CLI's built-in test runners could not be used in this org. The Testing Cente
 | Problem | Cause | Fix |
 |---|---|---|
 | A second message from the same email failed: "I could not record your message just now" | Salesforce's standard Lead duplicate rule blocked the insert (`DUPLICATES_DETECTED`) | `ResumeCaptureInquiry` saves with the duplicate rule set to allow and flag, so Dean still sees the match. Test added for a repeat message |
+
+## Run 5: after the reseed (2026-10-18)
+
+Dean's answers to an outside review changed `resume.json`: each renamed certification now shows its current name with the old one in parentheses, the credential IDs are gone (Salesforce's verification page checks by name), and the availability line gives his hours. The org was brought up to date, then three questions went to the live agent through `scripts/converse.js` with a short spec of their own. Version 2 was checked active first. Transcript in `out/run-5/`.
+
+| # | Question | Grade | Notes |
+|---|---|---|---|
+| 1 | Is he certified in Data Cloud? | Pass | Data 360 Consultant (formerly Data Cloud Consultant), September 2024. The credentials action found it through the former name |
+| 2 | What are his hours? | Pass | Remote part-time, 20 to 30 hours a week, evenings and weekends ET, daytime calls by appointment |
+| 3 | List his certifications. | Pass | All eight under their current names, former names in parentheses, with dates. No credential IDs |
+
+| Problem found while reseeding | Cause | Fix |
+|---|---|---|
+| 3 of 8 credential rows rejected | Renamed certifications run up to 107 characters, and a record Name holds 80. The Field Service upsert key (50 characters) also ran past the key field's 40 | A new `Former_Name__c` field holds the old name. `ResumeGetCredentials` shows "New name (formerly Old name)" and searches both, so "Data Cloud" still finds Data 360. The key field now holds 80 |
+| The action would print the upsert key as a "credential ID" | With no IDs in the resume, the key is a slug of the name | The action no longer prints the key, and a test checks it |
+| A plain reseed would leave the old 8 rows beside the new 8 | The upsert key changed from the credential ID to the name slug | The old rows were deleted first |
+
+Apex tests after the change: 4 of 4 passed. Coverage: `ResumeGetCredentials` 100%, `ResumeFindExperience` 96%, `ResumeCaptureInquiry` 95%, `ResumeGetProfile` 95%.
 
 ## Lessons worth keeping
 

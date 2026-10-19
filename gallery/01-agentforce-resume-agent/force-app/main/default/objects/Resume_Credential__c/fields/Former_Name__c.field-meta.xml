@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Former_Name__c</fullName>
+    <description>The name Salesforce used before it renamed the certification, if it did. Get Credentials shows it as (formerly ...) and searches it too.</description>
+    <label>Former Name</label>
+    <length>255</length>
+    <required>false</required>
+    <type>Text</type>
+</CustomField>

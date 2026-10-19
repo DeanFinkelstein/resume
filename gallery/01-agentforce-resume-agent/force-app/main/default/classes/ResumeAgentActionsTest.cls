@@ -24,9 +24,9 @@ private class ResumeAgentActionsTest {
                 Body_Technical__c = 'Eight Salesforce certifications.', Body_Plain__c = null)
         };
         insert new List<Resume_Credential__c>{
-            new Resume_Credential__c(Name = 'Salesforce Certified Data Cloud Consultant', Issuer__c = 'Salesforce', Date_Earned__c = 'Sep 2024', Credential_Id__c = '4947266', Sort_Order__c = 1),
-            new Resume_Credential__c(Name = 'Salesforce Certified AI Specialist', Issuer__c = 'Salesforce', Date_Earned__c = 'Oct 2024', Credential_Id__c = '4961332', Sort_Order__c = 2),
-            new Resume_Credential__c(Name = 'Salesforce Certified Administrator (SCA)', Issuer__c = 'Salesforce', Date_Earned__c = 'Feb 2021', Credential_Id__c = '21861521', Sort_Order__c = 3)
+            new Resume_Credential__c(Name = 'Salesforce Certified Data 360 Consultant', Former_Name__c = 'Data Cloud Consultant', Issuer__c = 'Salesforce', Date_Earned__c = 'Sep 2024', Credential_Id__c = 'data-360-consultant', Sort_Order__c = 1),
+            new Resume_Credential__c(Name = 'Salesforce Certified Agentforce Specialist', Former_Name__c = 'AI Specialist', Issuer__c = 'Salesforce', Date_Earned__c = 'Oct 2024', Credential_Id__c = 'agentforce-specialist', Sort_Order__c = 2),
+            new Resume_Credential__c(Name = 'Salesforce Certified Experience Cloud Consultant', Issuer__c = 'Salesforce', Date_Earned__c = 'Aug 2023', Credential_Id__c = 'experience-cloud-consultant', Sort_Order__c = 3)
         };
         insert new List<Resume_Engagement__c>{
             new Resume_Engagement__c(Name = 'Field Service rollout', Key__c = 'fsm', Employer__c = 'Cirrius Solutions Inc.', Period__c = '2026',
@@ -95,12 +95,14 @@ private class ResumeAgentActionsTest {
             res = ResumeGetCredentials.getCredentials(new List<ResumeGetCredentials.Request>{ dataCloud, none, all });
             Test.stopTest();
         }
-        Assert.areEqual(1, res[0].count);
-        Assert.isTrue(res[0].credentials.contains('Data Cloud Consultant, Salesforce, Sep 2024'));
+        Assert.areEqual(1, res[0].count, 'the former name finds the renamed certification, and Experience Cloud does not match');
+        Assert.isTrue(res[0].credentials.contains('Data 360 Consultant (formerly Data Cloud Consultant), Salesforce, Sep 2024'));
         Assert.isFalse(res[1].filterMatched, 'no Marketing Cloud certification exists');
         Assert.areEqual(3, res[1].count, 'full list returned when the filter matches nothing');
         Assert.areEqual(3, res[2].count);
         Assert.isTrue(res[2].filterMatched);
+        Assert.isTrue(res[2].credentials.contains('- Salesforce Certified Experience Cloud Consultant, Salesforce, Aug 2023'), 'no former name, no parentheses');
+        Assert.isFalse(res[2].credentials.contains('agentforce-specialist'), 'the upsert key is not shown');
     }
 
     @IsTest

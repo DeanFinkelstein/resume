@@ -54,11 +54,19 @@ section('about-agent', 'About This Agent', reg => reg === 't'
 
 // ---------------------------------------------------------------- credentials
 // resume.json no longer carries credential IDs (anyone can verify by name with Salesforce), so the upsert key falls back
-// to a slug of the current certification name.
-const credKey = c => c.id || c.name.replace(/\s*\(formerly[^)]*\)$/, '').replace(/^Salesforce Certified /, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+// to a slug of the current certification name. A renamed certification reads "New name (formerly Old name)"; the old
+// name goes in its own field, because the whole string can run past the 80 characters Salesforce allows in Name.
+const FORMERLY = /\s*\(formerly ([^)]*)\)$/;
+const currentName = c => c.name.replace(FORMERLY, '');
+const credKey = c => c.id || currentName(c).replace(/^Salesforce Certified /, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const cred = R.certifications.map((c, i) => ({
-  Credential_Id__c: credKey(c), Name: c.name, Issuer__c: 'Salesforce', Date_Earned__c: c.date, AI_Related__c: c.ai ? 'true' : 'false', Sort_Order__c: i + 1,
+  Credential_Id__c: credKey(c), Name: currentName(c), Former_Name__c: (c.name.match(FORMERLY) || [])[1] || '', Issuer__c: 'Salesforce',
+  Date_Earned__c: c.date, AI_Related__c: c.ai ? 'true' : 'false', Sort_Order__c: i + 1,
 }));
+for (const c of cred) {
+  if (c.Name.length > 80) throw new Error(`certification name over 80 characters: ${c.Name}`);
+  if (c.Credential_Id__c.length > 80) throw new Error(`credential key over 80 characters: ${c.Credential_Id__c}`);
+}
 
 // ---------------------------------------------------------------- engagements
 const cirriusNames = [

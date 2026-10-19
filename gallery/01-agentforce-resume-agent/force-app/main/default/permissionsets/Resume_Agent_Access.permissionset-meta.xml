@@ -46,6 +46,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>Resume_Credential__c.Former_Name__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>Resume_Credential__c.Issuer__c</field>
         <readable>true</readable>
     </fieldPermissions>
