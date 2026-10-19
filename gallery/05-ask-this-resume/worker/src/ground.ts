@@ -22,7 +22,7 @@ export interface Resume {
   education: { text: string; src: string }[];
   builtWith: { heading: string; body: Pair; pipeline: string[] };
   disclosure: Pair;
-  gallery?: { title: Pair; what: Pair; proof: string; href: string }[];
+  gallery?: { title: Pair; what: Pair; proof: string; href: string; video?: { src: string; caption: string } }[];
 }
 
 function render(r: Resume, reg: 't' | 'p'): string {
@@ -39,7 +39,7 @@ function render(r: Resume, reg: 't' | 'p'): string {
   L.push(`Source: ${r.aiPractice.src}`, '');
   if (r.gallery?.length) {
     L.push('## Gallery (built from scratch in a practice Salesforce org)');
-    for (const a of r.gallery) L.push(`- ${g(a.title)}: ${g(a.what)} (${a.proof})`);
+    for (const a of r.gallery) L.push(`- ${g(a.title)}: ${g(a.what)} (${a.proof})${a.video ? ` Demo video on the page: ${a.video.caption}` : ''}`);
     L.push('');
   }
   L.push('## Experience');
