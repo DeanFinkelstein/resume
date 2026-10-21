@@ -15,6 +15,7 @@
 ## Run it
 
 ```
+node audit.js --org resume-dev --preflight         # check access first
 node audit.js --org resume-dev --out ./out
 node to-tasks.js out/findings.json
 node create-issues.js --repo owner/name --dry-run   # preview every issue
@@ -38,6 +39,17 @@ The audit only reads, so it doesn't need an admin. Use a user with the standard 
 Salesforce requires the first two in the same permission set as View Health Check, even though the Read Only profile already has them. The user also has to connect an authenticator app before the first CLI login if the org requires MFA.
 
 Tested on 2026-10-20 by running the audit as that user and as an admin: 9 of the 11 checks matched exactly, finding for finding. The other two can't be read without much broader access. Org-wide Apex coverage needs code permissions or View All Data, and custom field descriptions need access to every field. The script says so and moves on; ask the org's admin for the coverage figure (Setup, Apex Classes, Estimate your organization's code coverage).
+
+Run `--preflight` before every client audit. It reads the signed-in user's effective permissions, tries one small query per check, and names anything missing with the fix. It also warns if the user can change anything, so the work is never described as read-only when it isn't. Tested on 2026-10-21: with the full permission set it reports ready; with View Health Check and View Reports in Public Folders removed, it names both and exits 1.
+
+If the browser login fails before the pre-flight can run, the usual causes are:
+
+- "Insufficient Privileges" asking for an authenticator app: the user hasn't connected one yet. Log out, log in again, connect it, then retry the CLI login.
+- No Salesforce API in the org (common on Professional Edition): the org has to add API access.
+- API Access Control is on: approve the Salesforce CLI app, or give the user Use Any API Client.
+- The Salesforce CLI app is installed with admin-approved users only: add the permission set to that app.
+- Single sign-on only, or login IP ranges on the profile: plan the login with the org's admin.
+- "localhost refused to connect" after clicking Allow: Salesforce approved the login, but the CLI had stopped waiting. Run the login again and click Allow within a minute or two.
 
 ## Proof (runs on 2026-10-17 and 2026-10-18 against the gallery's Agentforce Developer Edition org)
 

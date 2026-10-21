@@ -6,7 +6,10 @@
 // structured input instead of a wall of text.
 //
 // Usage:
+//   node audit.js --org <alias> --preflight
 //   node audit.js --org <alias> [--out <dir>] [--stale-days 90] [--min-api 55] [--redact]
+//   --preflight checks the signed-in user's access before the audit: one small query per check plus the user's
+//   effective permissions. It names any missing permission or setting and exits 1 if something needs fixing.
 //   --redact masks usernames, email addresses, org IDs, and the org address. Use it for anything you publish.
 //
 // Output: <out>/findings.md (human) and <out>/findings.json (structured, input to the task skill)
@@ -26,14 +29,14 @@ function parseArgs(argv) {
 }
 const opts = parseArgs(process.argv.slice(2));
 if (!opts.org) {
-  console.error('Usage: node audit.js --org <alias> [--out <dir>] [--stale-days 90] [--min-api 55]');
+  console.error('Usage: node audit.js --org <alias> [--preflight] [--out <dir>] [--stale-days 90] [--min-api 55] [--redact]');
   process.exit(2);
 }
 const ORG = opts.org;
 const STALE = Number(opts['stale-days'] || 90);
 const MIN_API = Number(opts['min-api'] || 55);
 const OUT = path.resolve(opts.out || path.join(process.cwd(), 'out'));
-fs.mkdirSync(OUT, { recursive: true });
+if (!opts.preflight) fs.mkdirSync(OUT, { recursive: true });
 
 // sf runs with an argument list, never through a shell, so no value is parsed as shell syntax. On Windows, sf is a
 // .cmd shim that Node will not start without a shell, so run the CLI's own entry script with node instead.
@@ -56,7 +59,7 @@ function sf(args) {
     if (!out.trim()) throw new Error(((e.stderr || e.message || '') + '').trim().split('\n')[0] || 'sf failed');
   }
   const j = JSON.parse(out);
-  if (j.status !== 0) throw new Error((j.message || j.name || 'sf error').split('\n')[0]);
+  if (j.status !== 0) throw new Error((j.message || j.name || 'sf error').replace(/\s+/g, ' ').trim());
   return j.result;
 }
 function rows(soql, tooling) {
@@ -71,6 +74,111 @@ let seq = 0;
 function add(check, severity, component, detail, recommendation, effort) {
   findings.push({ id: `F-${String(++seq).padStart(3, '0')}`, check, severity, component, detail, recommendation, effort });
 }
+
+// ---------------------------------------------------------------- pre-flight
+// Run first in a client org, right after the admin creates the user. Everything here is a query, like the audit.
+// The permission list was proven on 2026-10-20 by running the audit as a Read Only user and as an admin.
+const NEEDED = [
+  ['PermissionsViewSetup', 'View Setup and Configuration', 'most checks'],
+  ['PermissionsViewRoles', 'View Roles and Role Hierarchy', 'Salesforce requires it with View Health Check'],
+  ['PermissionsViewHealthCheck', 'View Health Check', 'the Security Health Check'],
+  ['PermissionsViewPublicReports', 'View Reports in Public Folders', 'the unused-reports count, which comes back low with no error without it'],
+];
+const CAN_CHANGE = [
+  ['PermissionsModifyAllData', 'Modify All Data'],
+  ['PermissionsCustomizeApplication', 'Customize Application'],
+  ['PermissionsModifyMetadata', 'Modify Metadata Through Metadata API Functions'],
+  ['PermissionsAuthorApex', 'Author Apex'],
+  ['PermissionsManageUsers', 'Manage Users'],
+];
+const ADD_VIEW_SETUP = 'Add View Setup and Configuration to the permission set.';
+const PROBES = [
+  ['Users with Modify All Data or View All Data', () => rows('SELECT Id FROM PermissionSetAssignment LIMIT 1'), ADD_VIEW_SETUP],
+  ['Users with no login', () => rows('SELECT Id, LastLoginDate FROM User WHERE IsActive = true LIMIT 1'), ADD_VIEW_SETUP],
+  ['Workflow Rules and Process Builder', () => { rows("SELECT Id FROM Flow WHERE Status = 'Active' AND ProcessType = 'Workflow' LIMIT 1", true); rows('SELECT Id FROM WorkflowRule LIMIT 1', true); }, ADD_VIEW_SETUP],
+  ['Flow API versions', () => rows("SELECT Id FROM Flow WHERE Status = 'Active' LIMIT 1", true), ADD_VIEW_SETUP],
+  ['Apex API versions', () => { rows('SELECT Id FROM ApexClass LIMIT 1'); rows('SELECT Id FROM ApexTrigger LIMIT 1'); }, ADD_VIEW_SETUP],
+  ['Inactive validation rules', () => rows('SELECT Id FROM ValidationRule WHERE Active = false LIMIT 1', true), ADD_VIEW_SETUP],
+  ['Unused reports', () => rows('SELECT Id FROM Report LIMIT 1'), 'Check that the user has Run Reports (the Read Only profile does).'],
+  ['Security Health Check', () => { rows('SELECT Score FROM SecurityHealthCheck', true); rows('SELECT RiskType FROM SecurityHealthCheckRisks LIMIT 1', true); },
+    'Add View Health Check to the permission set, together with View Setup and Configuration and View Roles and Role Hierarchy.'],
+  ['Org limits', () => sf(['limits', 'api', 'display', '--target-org', ORG]), ADD_VIEW_SETUP],
+];
+
+// Salesforce messages end with a period; drop it before adding the fix.
+const trim = s => String(s).replace(/[.\s]+$/, '');
+
+function preflight() {
+  const out = [];
+  const line = (status, name, detail) => out.push({ status, name, detail });
+  let fixes = 0;
+  const fix = (name, detail) => { fixes++; line('FIX', name, detail); };
+  const print = () => {
+    console.log(`Pre-flight for ${ORG}`);
+    for (const l of out) console.log(`  ${l.status.padEnd(4)}  ${l.name}${l.detail ? `: ${l.detail}` : ''}`);
+    return fixes;
+  };
+
+  // Signed in? A failed browser login never reaches this point; the README lists what blocks it.
+  let user;
+  try {
+    const d = sf(['org', 'display', '--target-org', ORG]);
+    if (d.connectedStatus && d.connectedStatus !== 'Connected') throw new Error(d.connectedStatus);
+    user = d.username;
+    line('ok', 'Signed in', opts.redact ? 'yes' : `as ${user}`);
+  } catch (e) {
+    fix('Signed in', `${trim(e.message)}. Sign in with: sf org login web --alias ${ORG} --instance-url <the org's My Domain URL>`);
+    print(); return 1;
+  }
+
+  // API access: Professional Edition orgs often don't have it, and nothing below works without it.
+  try {
+    const o = rows('SELECT OrganizationType, IsSandbox FROM Organization')[0] || {};
+    line('ok', 'API access', `${o.OrganizationType || 'unknown edition'}${o.IsSandbox ? ', sandbox' : ''}`);
+  } catch (e) {
+    const m = e.message;
+    fix('API access', /API_DISABLED_FOR_ORG/i.test(m) ? "this org doesn't include the Salesforce API (common on Professional Edition). The org has to add API access first."
+      : /API_CURRENTLY_DISABLED/i.test(m) ? "the user's profile doesn't allow API access. Use the standard Read Only profile."
+        : `${trim(m)}. Check that the user is active, then sign in again.`);
+    print(); return 1;
+  }
+
+  // The user's effective permissions: the profile's permission set plus every assigned permission set.
+  try {
+    const me = rows(`SELECT Id FROM User WHERE Username = '${String(user).replace(/'/g, "\\'")}'`)[0];
+    const fields = [...NEEDED, ...CAN_CHANGE].map(p => p[0]).concat('PermissionsViewAllData');
+    const sets = rows(`SELECT ${fields.join(', ')} FROM PermissionSet WHERE Id IN (SELECT PermissionSetId FROM PermissionSetAssignment WHERE AssigneeId = '${me.Id}')`);
+    const has = f => sets.some(s => s[f] === true);
+    for (const [f, label, why] of NEEDED) {
+      if (has(f)) line('ok', label);
+      else fix(label, `missing. Needed for ${why}. Add it to the permission set.`);
+    }
+    const write = CAN_CHANGE.filter(([f]) => has(f)).map(([, label]) => label);
+    if (write.length) line('note', 'Not read-only', `this user can change things (${write.join(', ')}). Fine for an admin, but don't describe the work as read-only.`);
+    else line('ok', 'Read-only', 'the user has none of the permissions that change data, setup, or code');
+    if (has('PermissionsViewAllData')) line('note', 'View All Data', 'this user can see every record. The audit only reads setup.');
+  } catch (e) {
+    fix('Permissions', `could not read them (${trim(e.message)}). ${ADD_VIEW_SETUP}`);
+  }
+
+  // One small query per check, the same objects the audit reads.
+  let ready = 0;
+  for (const [name, probe, hint] of PROBES) {
+    try { probe(); ready++; line('ok', `Check: ${name}`); } catch (e) { fix(`Check: ${name}`, `${trim(e.message)}. ${hint}`); }
+  }
+
+  // The two checks a read-only user can't run. Expected to be skipped; reported so nobody is surprised.
+  try { rows('SELECT PercentCovered FROM ApexOrgWideCoverage', true); line('note', 'Check: Apex test coverage', 'available to this user'); }
+  catch (e) { line('note', 'Check: Apex test coverage', "not visible to a read-only user (expected). Ask the admin for the figure: Setup, Apex Classes, Estimate your organization's code coverage"); }
+  try { rows('SELECT Id FROM CustomField LIMIT 1', true); line('note', 'Check: custom field descriptions', 'available to this user'); }
+  catch (e) { line('note', 'Check: custom field descriptions', 'needs admin-level access to every field (expected for a read-only user). Skipped'); }
+
+  print();
+  console.log(fixes ? `\nNot ready: ${fixes} item(s) to fix above. ${ready} of ${PROBES.length} checks can run now.`
+    : `\nReady: all ${PROBES.length} read-only checks can run.`);
+  return fixes ? 1 : 0;
+}
+if (opts.preflight) process.exit(preflight());
 
 // ---------------------------------------------------------------- checks
 const checks = [
