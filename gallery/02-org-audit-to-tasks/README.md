@@ -25,6 +25,20 @@ Add `--redact` to the audit for anything you will publish.
 
 Then, in Claude Code, run the skill and approve the list before anything is created.
 
+## Run it without admin access
+
+The audit only reads, so it doesn't need an admin. Use a user with the standard Read Only profile plus a permission set with five view-only permissions:
+
+- View Setup and Configuration
+- View Roles and Role Hierarchy
+- View Health Check
+- View Reports in Public Folders
+- Approve Uninstalled Connected Apps (since September 2025 the Salesforce CLI's sign-in app is uninstalled by default, and this is what lets the user sign in through it)
+
+Salesforce requires the first two in the same permission set as View Health Check, even though the Read Only profile already has them. The user also has to connect an authenticator app before the first CLI login if the org requires MFA.
+
+Tested on 2026-10-20 by running the audit as that user and as an admin: 9 of the 11 checks matched exactly, finding for finding. The other two can't be read without much broader access. Org-wide Apex coverage needs code permissions or View All Data, and custom field descriptions need access to every field. The script says so and moves on; ask the org's admin for the coverage figure (Setup, Apex Classes, Estimate your organization's code coverage).
+
 ## Proof (runs on 2026-10-17 and 2026-10-18 against the gallery's Agentforce Developer Edition org)
 
 | Step | Result |

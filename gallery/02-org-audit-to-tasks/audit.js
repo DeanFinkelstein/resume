@@ -141,8 +141,9 @@ const checks = [
   {
     name: `Apex classes and triggers below API ${MIN_API}`,
     run: () => {
-      const cls = rows(`SELECT Name, ApiVersion, NamespacePrefix FROM ApexClass WHERE ApiVersion < ${MIN_API} AND NamespacePrefix = null`, true);
-      const trg = rows(`SELECT Name, ApiVersion, TableEnumOrId, NamespacePrefix FROM ApexTrigger WHERE ApiVersion < ${MIN_API} AND NamespacePrefix = null`, true);
+      // Standard API, not Tooling: a read-only user can query these, and the results match an admin's.
+      const cls = rows(`SELECT Name, ApiVersion, NamespacePrefix FROM ApexClass WHERE ApiVersion < ${MIN_API} AND NamespacePrefix = null`);
+      const trg = rows(`SELECT Name, ApiVersion, TableEnumOrId, NamespacePrefix FROM ApexTrigger WHERE ApiVersion < ${MIN_API} AND NamespacePrefix = null`);
       for (const c of cls) add('Stale API version', 'low', `Apex class ${c.Name}`, `API ${c.ApiVersion}`, 'Raise the API version in a sandbox, run the tests, deploy.', 'S');
       for (const t of trg) add('Stale API version', 'low', `Apex trigger ${t.Name} on ${t.TableEnumOrId}`, `API ${t.ApiVersion}`, 'Raise the API version in a sandbox, run the tests, deploy.', 'S');
       return cls.length + trg.length;
@@ -151,7 +152,11 @@ const checks = [
   {
     name: 'Org-wide Apex test coverage',
     run: () => {
-      const r = rows('SELECT PercentCovered FROM ApexOrgWideCoverage', true);
+      // Coverage needs code permissions (Author Apex, Modify Metadata) or View All Data. A read-only user has neither.
+      let r;
+      try { r = rows('SELECT PercentCovered FROM ApexOrgWideCoverage', true); } catch (e) {
+        throw new Error("not visible to a read-only user. Ask the org's admin for the figure: Setup, Apex Classes, Estimate your organization's code coverage");
+      }
       const pct = r.length ? r[0].PercentCovered : null;
       if (pct != null && pct < 85) {
         add('Test coverage', pct < 75 ? 'high' : 'medium', 'Org-wide Apex coverage', `${pct}% covered (deployments to production require 75%)`,
@@ -175,7 +180,11 @@ const checks = [
   {
     name: 'Custom fields without a description',
     run: () => {
-      const r = rows('SELECT DeveloperName, TableEnumOrId, Description, NamespacePrefix FROM CustomField WHERE NamespacePrefix = null', true);
+      // A read-only user can't query CustomField, and FieldDefinition only shows the fields they have field-level access to.
+      let r;
+      try { r = rows('SELECT DeveloperName, TableEnumOrId, Description, NamespacePrefix FROM CustomField WHERE NamespacePrefix = null', true); } catch (e) {
+        throw new Error('needs admin-level access to every field, which a read-only user does not have');
+      }
       const missing = r.filter(f => !f.Description || !String(f.Description).trim());
       const byObj = new Map();
       for (const f of missing) byObj.set(f.TableEnumOrId, (byObj.get(f.TableEnumOrId) || 0) + 1);
